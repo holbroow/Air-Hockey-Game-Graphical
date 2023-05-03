@@ -1,7 +1,3 @@
-import java.util.concurrent.ExecutionException;
-
-import javax.lang.model.util.ElementScanner14;
-
 public class AirHockey
 {
 
@@ -48,10 +44,92 @@ public static void main(String[] args)
         table.addText(player2Score);
     
         
+        // Movement for Player 1 & 2
+        Runnable movementEngine = new Runnable()
+        {
+            public void run()
+            {
+                while(true)
+                {
+                    if (table.letterPressed('w'))
+                    {
+                        player1.move(0,-1);
+                    }
+                    if (table.letterPressed('s'))
+                    {
+                        player1.move(0,1);
+                    }
+                    if (table.letterPressed('a'))
+                    {
+                        player1.move(-1,0);
+                    }
+                    if (table.letterPressed('d'))
+                    {
+                        player1.move(1,0);
+                    }
+                    if (table.upPressed())
+                    {
+                        player2.move(0,-1);
+                    }
+                    if (table.downPressed())
+                    {
+                        player2.move(0,1);
+                    }
+                    if (table.leftPressed())
+                    {
+                        player2.move(-1,0);
+                    }
+                    if (table.rightPressed())
+                    {
+                        player2.move(1,0);
+                    }
+                    try
+                    {
+                        Thread.sleep(3);
+                    }
+                    catch(Exception e) {}
+                }
+            }
+        };
+        Thread movementEngineThread = new Thread(movementEngine);
+        movementEngineThread.start();
 
+        // // Collision for Player 1, 2, and the Puck
+        // Runnable collisionEngine = new Runnable()
+        // {
+        //     public void run()
+        //     {
+        //         if (player1.collides(puck))
+        //         {
+        //             if (player1.getXPosition() < puck.getXPosition())
+        //             {
+        //                 if (player1.getYPosition() < puck.getYPosition())
+        //                 {
+        //                     puck.move(1, 1);
+        //                 }
+        //                 else
+        //                 {
+        //                     puck.move(1, 0);
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 if (player1.getYPosition() > puck.getYPosition())
+        //                 {
+        //                     puck.move(-1, -1);
+        //                 }
+        //                 else
+        //                 {
+        //                     puck.move(-1, 0);
+        //                 }
+        //             }
+        //         }
 
+        //     }
+        // };
+        // Thread collisionEngineThread = new Thread(collisionEngine);
+        // collisionEngineThread.start();
 
-    
 
 
 
