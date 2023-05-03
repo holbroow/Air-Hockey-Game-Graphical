@@ -94,6 +94,47 @@ public static void main(String[] args)
         Thread movementEngineThread = new Thread(movementEngine);
         movementEngineThread.start();
 
+        Runnable speedEnginePlayer1 = new Runnable()
+        {
+            public void run()
+            {
+                while (true)
+                {
+                    while(table.letterPressed('a') || table.letterPressed('d'))
+                    {
+                        player1.changeXSpeed(player1.xSpeed() * 1.1);
+                    }
+                    while(table.letterPressed('w') || table.letterPressed('s'))
+                    {
+                        player1.changeYSpeed(player1.ySpeed() * 1.1);
+                    }
+                }
+            }
+        }
+        Thread speedEnginePlayer1Thread = new Thread(speedEnginePlayer1);
+        speedEnginePlayer1Thread.start();
+
+        Runnable speedEnginePlayer2 = new Runnable()
+        {
+            public void run()
+            {
+                while (true)
+                {
+                    while(table.leftPressed() || table.rightPressed())
+                    {
+                        player1.changeXSpeed(player1.xSpeed() * 1.1);
+                    }
+                    while(table.upPressed() || table.downPressed())
+                    {
+                        player1.changeYSpeed(player1.ySpeed() * 1.1);
+                    }
+                }
+            }
+        }
+        Thread speedEnginePlayer2Thread = new Thread(speedEnginePlayer2);
+        speedEnginePlayer2Thread.start();
+
+
         // // Collision for Player 1, 2, and the Puck
         // Runnable collisionEngine = new Runnable()
         // {

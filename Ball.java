@@ -184,10 +184,22 @@ public class Ball
 		return ySpeed;
 	}
 
+	public void changeXSpeed(double newSpeed)
+	{
+		xSpeed = newSpeed;
+	}
+
+	public void changeYSpeed(double newSpeed)
+	{
+		ySpeed = newSpeed;
+	}
+
 	public void calculateSpeed()
 	{
 		// idea is to track the position of the player's paddle (ball.player1/ball.player2) over a period of time (probably while it is moving) and then
 		// to calculate the player's speed from that. (Maybe the longer the player ball is travelling the faster it gets, before hitting the puck at that final speed value???)
+
+		
 	}
 
 	public void deflect(Ball otherBall) // method added and modified, originally pre-written for me
