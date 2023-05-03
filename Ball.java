@@ -37,6 +37,9 @@ public class Ball
 		this.size = diameter;
 		this.colour = col;
 		this.layer = 0;
+
+		this.xSpeed = 1;
+		this.ySpeed = 1;
 	}	
 
 	/**
@@ -54,6 +57,9 @@ public class Ball
 		this.size = diameter;
 		this.colour = col;
 		this.layer = layer;
+		
+		this.xSpeed = 1;
+		this.ySpeed = 1;
 	}	
 
 	/**
@@ -174,24 +180,26 @@ public class Ball
 		return distance < size/2 + b.size/2;
 	}
 
-	public double xSpeed()
+	public double getXSpeed()
 	{
 		return xSpeed;
 	}
 
-	public double ySpeed()
+	public double getYSpeed()
 	{
 		return ySpeed;
 	}
 
-	public void changeXSpeed(double newSpeed)
+	public void changeXSpeed(double newXSpeed)
 	{
-		xSpeed = newSpeed;
+		System.out.println("XSPEED CHANGEED " + newXSpeed);
+		xSpeed = newXSpeed;
 	}
 
-	public void changeYSpeed(double newSpeed)
+	public void changeYSpeed(double newYSpeed)
 	{
-		ySpeed = newSpeed;
+		System.out.println("YSPEED CHANGEED " + newYSpeed);
+		ySpeed = newYSpeed;
 	}
 
 	public void calculateSpeed()

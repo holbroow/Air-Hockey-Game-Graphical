@@ -1,6 +1,13 @@
 public class AirHockey
 {
 
+public static int gameSpeed = 3; // higher number means slower game speed
+// try
+// {
+//     Thread.sleep(gameSpeed);
+// }
+// catch (Exception e) {}
+
 
 public static void main(String[] args)
     {
@@ -83,18 +90,22 @@ public static void main(String[] args)
                     {
                         player2.move(1,0);
                     }
+                    System.out.println(player1.getXSpeed() + " xSpeed for Player1");
+                    System.out.println(player1.getYSpeed() + " ySpeed for Player1");
+                    System.out.println(player2.getXSpeed() + " xSpeed for Player2");
+                    System.out.println(player2.getYSpeed() + " ySpeed for Player2");
                     try
                     {
-                        Thread.sleep(2);
+                        Thread.sleep(gameSpeed);
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {}
                 }
             }
         };
         Thread movementEngineThread = new Thread(movementEngine);
         movementEngineThread.start();
 
-        Runnable speedEnginePlayer1 = new Runnable()
+        Runnable speedEngine = new Runnable()
         {
             public void run()
             {
@@ -102,78 +113,81 @@ public static void main(String[] args)
                 {
                     while(table.letterPressed('a') || table.letterPressed('d'))
                     {
-                        player1.changeXSpeed(player1.xSpeed() * 1.1);
+                        player1.changeXSpeed(player1.getXSpeed() * 1.00000000001);
                     }
                     while(table.letterPressed('w') || table.letterPressed('s'))
                     {
-                        player1.changeYSpeed(player1.ySpeed() * 1.1);
+                        player1.changeYSpeed(player1.getYSpeed() * 1.00000000001);
                     }
-                    System.out.printf("xSpeed for Player1 is %d.", player1.xSpeed());
-                    System.out.printf("ySpeed for Player1 is %d.", player1.ySpeed());
-                }
-            }
-        };
-        Thread speedEnginePlayer1Thread = new Thread(speedEnginePlayer1);
-        speedEnginePlayer1Thread.start();
-
-        Runnable speedEnginePlayer2 = new Runnable()
-        {
-            public void run()
-            {
-                while (true)
-                {
-                    while(table.leftPressed() || table.rightPressed())
+                    while(table.leftPressed()|| table.rightPressed())
                     {
-                        player1.changeXSpeed(player1.xSpeed() * 1.1);
+                        player2.changeXSpeed(player2.getXSpeed() * 1.00000000001);
                     }
                     while(table.upPressed() || table.downPressed())
                     {
-                        player1.changeYSpeed(player1.ySpeed() * 1.1);
+                        player2.changeYSpeed(player2.getYSpeed() * 1.00000000001);
                     }
+                    try
+                    {
+                        Thread.sleep(gameSpeed);
+                    }
+                    catch (Exception e) {}
                 }
             }
         };
-        Thread speedEnginePlayer2Thread = new Thread(speedEnginePlayer2);
-        speedEnginePlayer2Thread.start();
+        Thread speedEngineThread = new Thread(speedEngine);
+        speedEngineThread.start();
 
-
-        // // Collision for Player 1, 2, and the Puck
         // Runnable collisionEngine = new Runnable()
         // {
         //     public void run()
         //     {
-        //         if (player1.collides(puck))
+        //         if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
         //         {
-        //             if (player1.getXPosition() < puck.getXPosition())
-        //             {
-        //                 if (player1.getYPosition() < puck.getYPosition())
-        //                 {
-        //                     puck.move(1, 1);
-        //                 }
-        //                 else
-        //                 {
-        //                     puck.move(1, 0);
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 if (player1.getYPosition() > puck.getYPosition())
-        //                 {
-        //                     puck.move(-1, -1);
-        //                 }
-        //                 else
-        //                 {
-        //                     puck.move(-1, 0);
-        //                 }
-        //             }
+        //             player1.setXPosition(player1.getXPosition() + 1);
         //         }
-
+        //         if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
+        //         {
+        //             player1.setYPosition(player1.getYPosition() + 1);
+        //         }
+        //         if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2))
+        //         {
+        //             player1.setXPosition(player1.getXPosition() - 1);
+        //         }
+        //         try
+        //         {
+        //             Thread.sleep(gameSpeed);
+        //         }
+        //         catch (Exception e) {}
         //     }
         // };
         // Thread collisionEngineThread = new Thread(collisionEngine);
         // collisionEngineThread.start();
 
+        while(true)
+            {
+                if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
+                {
+                    player1.setXPosition(player1.getXPosition() + 1);
+                }
+                if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
+                {
+                    player1.setYPosition(player1.getYPosition() + 1);
+                }
+                if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2) - (player1.getSize()/2))
+                {
+                    player1.setXPosition(player1.getXPosition() - 1);
+                }
+                // if (player1.getYPosition() <= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player1.getSize()/2))
+                // {
+                //     player1.setYPosition(player1.getYPosition() - 1);
+                // }
+                try
+                {
+                    Thread.sleep(gameSpeed);
+                }
+                catch (Exception e) {}
+            }
 
-
+        }
     }
-}
