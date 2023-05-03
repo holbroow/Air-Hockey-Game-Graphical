@@ -20,6 +20,9 @@ public class Ball
 										// GREEN, LIGHTGREY, MAGENTA, ORANGE,
 										// PINK, RED, WHITE, YELLOW, BROWN
 
+	private double xSpeed;
+	private double ySpeed;
+
 	/**
 	 * Constructor for the Ball class. Sets a default layer of 0.
 	 * @param x The x co-ordinate of centre of the Ball (in pixels)
@@ -171,8 +174,23 @@ public class Ball
 		return distance < size/2 + b.size/2;
 	}
 
+	public double xSpeed()
+	{
+		return xSpeed;
+	}
 
-	public void deflect(Ball otherBall)
+	public double ySpeed()
+	{
+		return ySpeed;
+	}
+
+	public void calculateSpeed()
+	{
+		// idea is to track the position of the player's paddle (ball.player1/ball.player2) over a period of time (probably while it is moving) and then
+		// to calculate the player's speed from that. (Maybe the longer the player ball is travelling the faster it gets, before hitting the puck at that final speed value???)
+	}
+
+	public void deflect(Ball otherBall) // method added and modified, originally pre-written for me
 	{
 		// The position and speed of each of the two balls in the x and y axis before collision.
 		// YOU NEED TO FILL THESE VALUES IN AS APPROPRIATE...
@@ -181,13 +199,13 @@ public class Ball
 
 		xPosition1 = this.xPosition;
 		yPosition1 = this.yPosition;
-		xSpeed1 = this.xspeed; ////////////// 	need to figure out speed within this ball class
-		ySpeed1 = this.yspeed; ////////////// 	need to figure out speed within this ball class
+		xSpeed1 = this.xSpeed; ////////////// 	need to figure out speed within this ball class
+		ySpeed1 = this.ySpeed; ////////////// 	need to figure out speed within this ball class
 		xPosition2 = otherBall.xPosition;
 		yPosition2 = otherBall.yPosition;
-		xSpeed2 = otherBall.xspeed; ////////////// 	need to figure out speed within this ball class
-		ySpeed2 = otherBall.yspeed; ////////////// 	need to figure out speed within this ball class
-		
+		xSpeed2 = otherBall.xSpeed; ////////////// 	need to figure out speed within this ball class
+		ySpeed2 = otherBall.ySpeed; ////////////// 	need to figure out speed within this ball class
+
 		// Calculate initial momentum of the balls... We assume unit mass here.
 		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
 		double p2InitialMomentum = Math.sqrt(xSpeed2 * xSpeed2 + ySpeed2 * ySpeed2);
