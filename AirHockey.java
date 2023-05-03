@@ -108,9 +108,11 @@ public static void main(String[] args)
                     {
                         player1.changeYSpeed(player1.ySpeed() * 1.1);
                     }
+                    System.out.printf("xSpeed for Player1 is %d.", player1.xSpeed());
+                    System.out.printf("ySpeed for Player1 is %d.", player1.ySpeed());
                 }
             }
-        }
+        };
         Thread speedEnginePlayer1Thread = new Thread(speedEnginePlayer1);
         speedEnginePlayer1Thread.start();
 
@@ -130,7 +132,7 @@ public static void main(String[] args)
                     }
                 }
             }
-        }
+        };
         Thread speedEnginePlayer2Thread = new Thread(speedEnginePlayer2);
         speedEnginePlayer2Thread.start();
 
