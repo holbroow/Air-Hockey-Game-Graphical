@@ -172,12 +172,22 @@ public class Ball
 	}
 
 
-	public void deflect()
+	public void deflect(Ball otherBall)
 	{
 		// The position and speed of each of the two balls in the x and y axis before collision.
 		// YOU NEED TO FILL THESE VALUES IN AS APPROPRIATE...
 		double xPosition1, xPosition2, yPosition1, yPosition2;
 		double xSpeed1, xSpeed2, ySpeed1, ySpeed2;
+
+		xPosition1 = this.xPosition;
+		yPosition1 = this.yPosition;
+		xSpeed1 = this.xspeed; ////////////// 	need to figure out speed within this ball class
+		ySpeed1 = this.yspeed; ////////////// 	need to figure out speed within this ball class
+		xPosition2 = otherBall.xPosition;
+		yPosition2 = otherBall.yPosition;
+		xSpeed2 = otherBall.xspeed; ////////////// 	need to figure out speed within this ball class
+		ySpeed2 = otherBall.yspeed; ////////////// 	need to figure out speed within this ball class
+		
 		// Calculate initial momentum of the balls... We assume unit mass here.
 		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
 		double p2InitialMomentum = Math.sqrt(xSpeed2 * xSpeed2 + ySpeed2 * ySpeed2);

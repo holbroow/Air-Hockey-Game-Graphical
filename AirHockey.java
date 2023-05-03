@@ -85,7 +85,7 @@ public static void main(String[] args)
                     }
                     try
                     {
-                        Thread.sleep(3);
+                        Thread.sleep(2);
                     }
                     catch(Exception e) {}
                 }
@@ -129,9 +129,6 @@ public static void main(String[] args)
         // };
         // Thread collisionEngineThread = new Thread(collisionEngine);
         // collisionEngineThread.start();
-
-
-
 
 
 
