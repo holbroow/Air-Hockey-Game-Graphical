@@ -1,12 +1,39 @@
 public class AirHockey
 {
 
-public static int gameSpeed = 3; // higher number means slower game speed
+public static int gameSpeed = 1; // higher number means slower game speed
 // try
 // {
 //     Thread.sleep(gameSpeed);
 // }
 // catch (Exception e) {}
+
+
+// Runnable collisionEngine = new Runnable()
+        // {
+        //     public void run()
+        //     {
+        //         if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
+        //         {
+        //             player1.setXPosition(player1.getXPosition() + 1);
+        //         }
+        //         if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
+        //         {
+        //             player1.setYPosition(player1.getYPosition() + 1);
+        //         }
+        //         if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2))
+        //         {
+        //             player1.setXPosition(player1.getXPosition() - 1);
+        //         }
+        //         try
+        //         {
+        //             Thread.sleep(gameSpeed);
+        //         }
+        //         catch (Exception e) {}
+        //     }
+        // };
+        // Thread collisionEngineThread = new Thread(collisionEngine);
+        // collisionEngineThread.start();
 
 
 public static void main(String[] args)
@@ -138,33 +165,9 @@ public static void main(String[] args)
         Thread speedEngineThread = new Thread(speedEngine);
         speedEngineThread.start();
 
-        // Runnable collisionEngine = new Runnable()
-        // {
-        //     public void run()
-        //     {
-        //         if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
-        //         {
-        //             player1.setXPosition(player1.getXPosition() + 1);
-        //         }
-        //         if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
-        //         {
-        //             player1.setYPosition(player1.getYPosition() + 1);
-        //         }
-        //         if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2))
-        //         {
-        //             player1.setXPosition(player1.getXPosition() - 1);
-        //         }
-        //         try
-        //         {
-        //             Thread.sleep(gameSpeed);
-        //         }
-        //         catch (Exception e) {}
-        //     }
-        // };
-        // Thread collisionEngineThread = new Thread(collisionEngine);
-        // collisionEngineThread.start();
-
-        while(true)
+        Runnable playerCollisionEngine = new Runnable()
+        {
+            public void run()
             {
                 if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
                 {
@@ -178,16 +181,39 @@ public static void main(String[] args)
                 {
                     player1.setXPosition(player1.getXPosition() - 1);
                 }
-                // if (player1.getYPosition() <= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player1.getSize()/2))
-                // {
-                //     player1.setYPosition(player1.getYPosition() - 1);
-                // }
+                if (player1.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player1.getSize()/2))
+                {
+                    player1.setYPosition(player1.getYPosition() - 1);
+                }
+
+                if (player2.getXPosition() <= (tableSurface.getXPosition() + tableSurface.getWidth()/2) + (player2.getSize()/2))
+                {
+                    player2.setXPosition(player2.getXPosition() + 1);
+                }
+                if (player2.getYPosition() <= (tableSurface.getYPosition() + (player2.getSize()/2)))
+                {
+                    player2.setYPosition(player2.getYPosition() + 1);
+                }
+                if (player2.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()) - (player2.getSize()/2))
+                {
+                    player2.setXPosition(player2.getXPosition() - 1);
+                }
+                if (player2.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player2.getSize()/2))
+                {
+                    player2.setYPosition(player2.getYPosition() - 1);
+                }
+
                 try
                 {
                     Thread.sleep(gameSpeed);
                 }
                 catch (Exception e) {}
             }
+        }
+        Thread playerCollisionThread = new Thread(playerCollisionEngine);
+        playerCollisionThread.start();
+
+        
 
         }
     }
