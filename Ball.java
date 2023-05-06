@@ -22,6 +22,7 @@ public class Ball
 
 	private double xSpeed;
 	private double ySpeed;
+	private double mass;
 
 	/**
 	 * Constructor for the Ball class. Sets a default layer of 0.
@@ -190,6 +191,11 @@ public class Ball
 		return ySpeed;
 	}
 
+	public double getMass()
+	{
+		return mass;
+	}
+
 	public void changeXSpeed(double newXSpeed)
 	{
 		System.out.println("XSPEED CHANGEED " + newXSpeed);
@@ -209,22 +215,20 @@ public class Ball
 
 		
 	}
+	
 
-	public void deflect(Ball otherBall) // method added and modified, originally pre-written for me
+	public void deflect(Ball puck) // method added and modified, originally pre-written for me
 	{
 		// The position and speed of each of the two balls in the x and y axis before collision.
-		// YOU NEED TO FILL THESE VALUES IN AS APPROPRIATE...
-		double xPosition1, xPosition2, yPosition1, yPosition2;
-		double xSpeed1, xSpeed2, ySpeed1, ySpeed2;
-
-		xPosition1 = this.xPosition;
-		yPosition1 = this.yPosition;
-		xSpeed1 = this.xSpeed; ////////////// 	need to figure out speed within this ball class
-		ySpeed1 = this.ySpeed; ////////////// 	need to figure out speed within this ball class
-		xPosition2 = otherBall.xPosition;
-		yPosition2 = otherBall.yPosition;
-		xSpeed2 = otherBall.xSpeed; ////////////// 	need to figure out speed within this ball class
-		ySpeed2 = otherBall.ySpeed; ////////////// 	need to figure out speed within this ball class
+		double xPosition1 = this.getXPosition();
+		double yPosition1 = this.getYPosition();
+		double xSpeed1 = this.getXSpeed();
+		double ySpeed1 = this.getYSpeed();
+		double xPosition2 = puck.getXPosition();
+		double yPosition2 = puck.getYPosition();
+		double xSpeed2 = puck.getXSpeed();
+		double ySpeed2 = puck.getYSpeed();
+		
 
 		// Calculate initial momentum of the balls... We assume unit mass here.
 		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);

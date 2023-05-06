@@ -1,3 +1,5 @@
+import java.util.function.LongConsumer;
+
 public class AirHockey
 {
 
@@ -9,52 +11,25 @@ public static int gameSpeed = 1; // higher number means slower game speed
 // catch (Exception e) {}
 
 
-// Runnable collisionEngine = new Runnable()
-        // {
-        //     public void run()
-        //     {
-        //         if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
-        //         {
-        //             player1.setXPosition(player1.getXPosition() + 1);
-        //         }
-        //         if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
-        //         {
-        //             player1.setYPosition(player1.getYPosition() + 1);
-        //         }
-        //         if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2))
-        //         {
-        //             player1.setXPosition(player1.getXPosition() - 1);
-        //         }
-        //         try
-        //         {
-        //             Thread.sleep(gameSpeed);
-        //         }
-        //         catch (Exception e) {}
-        //     }
-        // };
-        // Thread collisionEngineThread = new Thread(collisionEngine);
-        // collisionEngineThread.start();
-
-
 public static void main(String[] args)
     {
         // Game window (Game Arena named 'table')
-        GameArena table = new GameArena(1100, 600);
+        GameArena table = new GameArena(1100, 600, true);
 
         // Air Hockey Table
-        Rectangle background = new Rectangle(0, 0, 1100, 600, "grey");
-        Rectangle tableBorder = new Rectangle(100, 100, 900, 400, "black");
-        Rectangle tableSurface = new Rectangle(125, 125, 850, 350, "white");
-        Rectangle goal1 = new Rectangle(125, 212, 10, 175, "yellow");
-        Rectangle goal2 = new Rectangle(965, 212, 10, 175, "yellow");
-        Line centreLine = new Line(550, 125, 550, 475, 1, "black");
-        Ball centreRingOutline = new Ball(550, 300, 70, "black");
-        Ball centreRing = new Ball(550, 300, 68, "white");
+        Rectangle background = new Rectangle(0, 0, 1100, 600, "grey", 0);
+        Rectangle tableBorder = new Rectangle(100, 100, 900, 400, "black", 0);
+        Rectangle tableSurface = new Rectangle(125, 125, 850, 350, "white", 0);
+        Rectangle goal1 = new Rectangle(125, 212, 10, 175, "yellow", 0);
+        Rectangle goal2 = new Rectangle(965, 212, 10, 175, "yellow", 0);
+        Line centreLine = new Line(550, 125, 550, 475, 1, "black", 0);
+        Ball centreRingOutline = new Ball(550, 300, 70, "black", 0);
+        Ball centreRing = new Ball(550, 300, 68, "white", 0);
 
         // 2 Players and Hockey puck
-        Ball puck = new Ball(550, 300, 20, "black");
-        Ball player1 = new Ball(250, 300, 50, "black");
-        Ball player2 = new Ball(850, 300, 50, "black");
+        Ball puck = new Ball(550, 300, 20, "black", 1);
+        Ball player1 = new Ball(250, 300, 50, "black", 1);
+        Ball player2 = new Ball(850, 300, 50, "black", 1);
         
         // Text Elements within the game
         Text title = new Text("Air Hockey Game", 25, 25, 45, "black");
@@ -70,14 +45,14 @@ public static void main(String[] args)
         table.addLine(centreLine);
         table.addBall(centreRingOutline);
         table.addBall(centreRing);
-        table.addBall(puck);
         table.addBall(player1);
         table.addBall(player2);
+        table.addBall(puck);
         table.addText(title);
         table.addText(player1Score);
         table.addText(player2Score);
     
-        
+
         // Movement for Player 1 & 2
         Runnable movementEngine = new Runnable()
         {
@@ -132,6 +107,7 @@ public static void main(String[] args)
         Thread movementEngineThread = new Thread(movementEngine);
         movementEngineThread.start();
 
+        // Speed engine for calculating multiplied speed over time with the Player mallets.
         Runnable speedEngine = new Runnable()
         {
             public void run()
@@ -165,55 +141,61 @@ public static void main(String[] args)
         Thread speedEngineThread = new Thread(speedEngine);
         speedEngineThread.start();
 
+        // Collision engine for preventing the players from leaving their halves of the table or the table itself.
         Runnable playerCollisionEngine = new Runnable()
         {
             public void run()
             {
-                if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
+                while (true)
                 {
-                    player1.setXPosition(player1.getXPosition() + 1);
-                }
-                if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
-                {
-                    player1.setYPosition(player1.getYPosition() + 1);
-                }
-                if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2) - (player1.getSize()/2))
-                {
-                    player1.setXPosition(player1.getXPosition() - 1);
-                }
-                if (player1.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player1.getSize()/2))
-                {
-                    player1.setYPosition(player1.getYPosition() - 1);
-                }
+                    if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
+                    {
+                        player1.setXPosition(player1.getXPosition() + 1);
+                    }
+                    if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
+                    {
+                        player1.setYPosition(player1.getYPosition() + 1);
+                    }
+                    if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2) )//- (player1.getSize()/2))
+                    {
+                        player1.setXPosition(player1.getXPosition() - 1);
+                    }
+                    if (player1.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) )//- (player1.getSize()/2))
+                    {
+                        player1.setYPosition(player1.getYPosition() - 1);
+                    }
 
-                if (player2.getXPosition() <= (tableSurface.getXPosition() + tableSurface.getWidth()/2) + (player2.getSize()/2))
-                {
-                    player2.setXPosition(player2.getXPosition() + 1);
-                }
-                if (player2.getYPosition() <= (tableSurface.getYPosition() + (player2.getSize()/2)))
-                {
-                    player2.setYPosition(player2.getYPosition() + 1);
-                }
-                if (player2.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()) - (player2.getSize()/2))
-                {
-                    player2.setXPosition(player2.getXPosition() - 1);
-                }
-                if (player2.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) - (player2.getSize()/2))
-                {
-                    player2.setYPosition(player2.getYPosition() - 1);
-                }
+                    if (player2.getXPosition() <= (tableSurface.getXPosition() + tableSurface.getWidth()/2) )//+ (player2.getSize()/2))
+                    {
+                        player2.setXPosition(player2.getXPosition() + 1);
+                    }
+                    if (player2.getYPosition() <= (tableSurface.getYPosition() + (player2.getSize()/2)))
+                    {
+                        player2.setYPosition(player2.getYPosition() + 1);
+                    }
+                    if (player2.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()) )//- (player2.getSize()/2))
+                    {
+                        player2.setXPosition(player2.getXPosition() - 1);
+                    }
+                    if (player2.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) )//- (player2.getSize()/2))
+                    {
+                        player2.setYPosition(player2.getYPosition() - 1);
+                    }
 
-                try
-                {
-                    Thread.sleep(gameSpeed);
+                    try
+                    {
+                        Thread.sleep(gameSpeed);
+                    }
+                    catch (Exception e) {}
                 }
-                catch (Exception e) {}
             }
-        }
+        };
         Thread playerCollisionThread = new Thread(playerCollisionEngine);
         playerCollisionThread.start();
 
-        
+    
 
-        }
+
+        
     }
+}
