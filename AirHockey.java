@@ -28,8 +28,8 @@ public static void main(String[] args)
 
         // 2 Players and Hockey puck
         Ball puck = new Ball(550, 300, 20, "black", 1);
-        Ball player1 = new Ball(250, 300, 50, "black", 1);
-        Ball player2 = new Ball(850, 300, 50, "black", 1);
+        Ball player1 = new Ball(250, 300, 50, "blue", 1);
+        Ball player2 = new Ball(850, 300, 50, "red", 1);
         
         // Text Elements within the game
         Text title = new Text("Air Hockey Game", 25, 25, 45, "black");
@@ -142,34 +142,38 @@ public static void main(String[] args)
         speedEngineThread.start();
 
         // Collision engine for preventing the players from leaving their halves of the table or the table itself.
-        Runnable playerCollisionEngine = new Runnable()
+        Runnable playerBoundaryEngine = new Runnable()
         {
             public void run()
             {
                 while (true)
                 {
-                    if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize()/2)))
+                    // left side of boundary
+                    if (player1.getXPosition() <= (tableSurface.getXPosition() + (player1.getSize() /2)))
                     {
                         player1.setXPosition(player1.getXPosition() + 1);
                     }
-                    if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize()/2)))
+                    // top side of boundary
+                    if (player1.getYPosition() <= (tableSurface.getYPosition() + (player1.getSize() /2)))
                     {
                         player1.setYPosition(player1.getYPosition() + 1);
                     }
-                    if (player1.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth()/2) )//- (player1.getSize()/2))
+                    // right side of boundary
+                    if (player1.getXPosition() >= (tableSurface.getXPosition() + (tableSurface.getWidth() /2) +1) )//- (player1.getSize()/2))
                     {
                         player1.setXPosition(player1.getXPosition() - 1);
                     }
+                    // bottom side of boundary
                     if (player1.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight()) )//- (player1.getSize()/2))
                     {
                         player1.setYPosition(player1.getYPosition() - 1);
                     }
 
-                    if (player2.getXPosition() <= (tableSurface.getXPosition() + tableSurface.getWidth()/2) )//+ (player2.getSize()/2))
+                    if (player2.getXPosition() <= (tableSurface.getXPosition() + tableSurface.getWidth() /2) )//+ (player2.getSize()/2))
                     {
                         player2.setXPosition(player2.getXPosition() + 1);
                     }
-                    if (player2.getYPosition() <= (tableSurface.getYPosition() + (player2.getSize()/2)))
+                    if (player2.getYPosition() <= (tableSurface.getYPosition() + (player2.getSize()/2) -1) )
                     {
                         player2.setYPosition(player2.getYPosition() + 1);
                     }
@@ -190,11 +194,22 @@ public static void main(String[] args)
                 }
             }
         };
-        Thread playerCollisionThread = new Thread(playerCollisionEngine);
-        playerCollisionThread.start();
+        Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
+        //playerBoundaryThread.start();
 
-    
+        while(true)
+        {
+            if (puck.collides(player1))
+            {
+                puck.move(10,0);
+            }
+            if (player2.collides(puck))
+            {
+                puck.move(-10,0);
+            }
 
+
+        }
 
         
     }
