@@ -195,22 +195,24 @@ public static void main(String[] args)
             }
         };
         Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
-        //playerBoundaryThread.start();
+        playerBoundaryThread.start();
 
         while(true)
         {
-            if (puck.collides(player1))
+            if (player1.collides(puck))
             {
                 puck.move(10,0);
             }
-            if (player2.collides(puck))
+            try
             {
-                puck.move(-10,0);
+                Thread.sleep(gameSpeed);
             }
-
-
+            catch(Exception e)
+            {
+                System.out.println("Exception.");
+            }
+        
         }
 
-        
     }
 }
