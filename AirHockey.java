@@ -223,18 +223,28 @@ public static void main(String[] args) {
         Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
         playerBoundaryThread.start();
 
+        // while(true) {
+        //     if (player1.collides(puck)) {
+        //         puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
+        //     }
+        //     if (player2.collides(puck)) {
+        //         puck.move(-(player2.getYSpeed()), -(player2.getYSpeed()));
+        //     }
+        //     try {
+        //         Thread.sleep(gameSpeed);
+        //     } catch(Exception e) {
+        //         System.out.println("Exception.");
+        //     }
+        // }
+
         while(true) {
-            if (player1.collides(puck)) {
-                deflect(player1, puck);
-                for (int i = 0; i < 10; i++) {
-                    puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
-                }
-            }
+            puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
             try {
                 Thread.sleep(gameSpeed);
             } catch(Exception e) {
                 System.out.println("Exception.");
             }
         }
+
     }
 }
