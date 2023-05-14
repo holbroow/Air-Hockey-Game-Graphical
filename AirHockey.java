@@ -4,7 +4,7 @@
 public class AirHockey {
 
 
-private static int gameSpeed = 5; // game speed - higher number means slower game speed
+private static int gameSpeed = 1; // game speed - higher number means slower game speed
 private static int p1Score = 0; // player 1 score
 private static int p2Score = 0; // player 2 score
 
@@ -19,12 +19,12 @@ private static int p2Score = 0; // player 2 score
  * @param xSpeed2
  * @param ySpeed2
  */
-public static double[] deflect(double xPosition1, double yPosition1, double xSpeed1, double ySpeed1, double mass1, double xPosition2, double yPosition2, double xSpeed2, double ySpeed2, double mass2) {// method added and modified, originally pre-written for me 
+public static double[] deflect(double xPosition1, double yPosition1, double xSpeed1, double ySpeed1, double xPosition2, double yPosition2, double xSpeed2, double ySpeed2) {// method added and modified, originally pre-written for me 
     // all necessary variables re passed in to this function.
 
     // Calculate initial momentum of the balls... We assume unit mass here.
-    double p1InitialMomentum = mass1 * Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
-    double p2InitialMomentum = mass2 * Math.sqrt(xSpeed2 * xSpeed2 + ySpeed2 * ySpeed2);
+    double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
+    double p2InitialMomentum = Math.sqrt(xSpeed2 * xSpeed2 + ySpeed2 * ySpeed2);
     // calculate motion vectors
     double[] p1Trajectory = {xSpeed1, ySpeed1};
     double[] p2Trajectory = {xSpeed2, ySpeed2};
@@ -41,8 +41,8 @@ public static double[] deflect(double xPosition1, double yPosition1, double xSpe
     double[] p1FinalTrajectory = {p1Trajectory[0] + p1Deflect[0] - p2Deflect[0], p1Trajectory[1] + p1Deflect[1] - p2Deflect[1]};
     double[] p2FinalTrajectory = {p2Trajectory[0] + p2Deflect[0] - p1Deflect[0], p2Trajectory[1] + p2Deflect[1] - p1Deflect[1]};
     // Calculate the final energy in the system.
-    double p1FinalMomentum = mass1 * Math.sqrt(p1FinalTrajectory[0] * p1FinalTrajectory[0] + p1FinalTrajectory[1] * p1FinalTrajectory[1]);
-    double p2FinalMomentum = mass2 * Math.sqrt(p2FinalTrajectory[0] * p2FinalTrajectory[0] + p2FinalTrajectory[1] * p2FinalTrajectory[1]);
+    double p1FinalMomentum = Math.sqrt(p1FinalTrajectory[0] * p1FinalTrajectory[0] + p1FinalTrajectory[1] * p1FinalTrajectory[1]);
+    double p2FinalMomentum = Math.sqrt(p2FinalTrajectory[0] * p2FinalTrajectory[0] + p2FinalTrajectory[1] * p2FinalTrajectory[1]);
 
     // Scale the resultant trajectories if we've accidentally broken the laws of physics.
     double mag = (p1InitialMomentum + p2InitialMomentum) / (p1FinalMomentum + p2FinalMomentum);
@@ -53,13 +53,13 @@ public static double[] deflect(double xPosition1, double yPosition1, double xSpe
     xSpeed2 = p2FinalTrajectory[0] * mag;
     ySpeed2 = p2FinalTrajectory[1] * mag;
 
-    double[] returnValues = new double[4];
-    returnValues[0] = xSpeed1;
-    returnValues[1] = ySpeed1;
-    returnValues[2] = xSpeed2;
-    returnValues[3] = ySpeed2;
+    double[] deflectValues = new double[4];
+    deflectValues[0] = xSpeed1;
+    deflectValues[1] = ySpeed1;
+    deflectValues[2] = xSpeed2;
+    deflectValues[3] = ySpeed2;
 
-    return returnValues;
+    return deflectValues;
 }
 
 /**
@@ -161,10 +161,10 @@ public static void main(String[] args) {
                 if (table.rightPressed()) {
                     player2.move(1,0);
                 }
-                // System.out.println(player1.getXSpeed() + " xSpeed for Player1");
-                // System.out.println(player1.getYSpeed() + " ySpeed for Player1");
-                // System.out.println(player2.getXSpeed() + " xSpeed for Player2");
-                // System.out.println(player2.getYSpeed() + " ySpeed for Player2");
+                System.out.println(player1.getXSpeed() + " xSpeed for Player1");
+                System.out.println(player1.getYSpeed() + " ySpeed for Player1");
+                System.out.println(player2.getXSpeed() + " xSpeed for Player2");
+                System.out.println(player2.getYSpeed() + " ySpeed for Player2");
                 try {
                     Thread.sleep(gameSpeed);
                 } catch (Exception e) {}
@@ -179,16 +179,28 @@ public static void main(String[] args) {
         public void run() {
             while (true) {
                 while(table.letterPressed('a') || table.letterPressed('d')) {
-                    player1.setXSpeed(player1.getXSpeed() * 1.00000000001);
+                    if (player1.getXSpeed() == 0) {
+                        player1.setXSpeed(1);
+                    }
+                    player1.setXSpeed(player1.getXSpeed() * 1.0000000001);
                 }
                 while(table.letterPressed('w') || table.letterPressed('s')) {
-                    player1.setYSpeed(player1.getYSpeed() * 1.00000000001);
+                    if (player1.getYSpeed() == 0) {
+                        player1.setYSpeed(1);
+                    }
+                    player1.setYSpeed(player1.getYSpeed() * 1.0000000001);
                 }
                 while(table.leftPressed()|| table.rightPressed()) {
-                    player2.setXSpeed(player2.getXSpeed() * 1.00000000001);
+                    if (player2.getXSpeed() == 0) {
+                        player2.setXSpeed(1);
+                    }
+                    player2.setXSpeed(player2.getXSpeed() * 1.0000000001);
                 }
                 while(table.upPressed() || table.downPressed()) {
-                    player2.setYSpeed(player2.getYSpeed() * 1.00000000001);
+                    if (player2.getYSpeed() == 0) {
+                        player2.setYSpeed(1);
+                    }
+                    player2.setYSpeed(player2.getYSpeed() * 1.0000000001);
                 }
                 try {
                     Thread.sleep(gameSpeed);
@@ -274,105 +286,67 @@ public static void main(String[] args) {
     Thread puckScoreThread = new Thread(puckScoreEngine);
     // puckScoreThread.start();
 
-    puck.setXSpeed(0);
-    puck.setYSpeed(0);
-
     // Boundary engine for preventing the puck from leaving the table and bouncing it off of said boundaries.
-    // Runnable puckBoundaryEngine = new Runnable() {
-    //     public void run() {
-    //         while (true) {
-    //             // left side of boundary
-    //             if (puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) {
-    //                 // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
-    //                 puck.setXSpeed(puck.getXSpeed() * -1);
-    //                 // puck.setXSpeed(deflectValues[0]);
-    //                 // puck.setYSpeed(deflectValues[1]);
-    //             }
-    //             // top side of boundary
-    //             if (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) {
-    //                 // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
-    //                 puck.setYSpeed(puck.getYSpeed() * -1);
-    //                 // puck.setXSpeed(deflectValues[0]);
-    //                 // puck.setYSpeed(deflectValues[1]);
-    //             }
-    //             // right side of boundary
-    //             if (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) {
-    //                 // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
-    //                 puck.setXSpeed(puck.getXSpeed() * -1);
-    //                 // puck.setXSpeed(deflectValues[0]);
-    //                 // puck.setYSpeed(deflectValues[1]);
-    //             }
-    //             // bottom side of boundary
-    //             if (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2))) {
-    //                 // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
-    //                 puck.setYSpeed(puck.getYSpeed() * -1);
-    //                 // puck.setXSpeed(deflectValues[0]);
-    //                 // puck.setYSpeed(deflectValues[1]);
-    //             }
+    Runnable puckCollisionEngine = new Runnable() {
+        public void run() {
+            while(true) {
+                if(player1.collides(puck)) {
+                    double[] deflectValues = deflect(player1.getXPosition(), player1.getYPosition(), player1.getXSpeed(), player1.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
+                    puck.setXSpeed(deflectValues[2]);
+                    puck.setYSpeed(deflectValues[3]);
+                }
+                if(player2.collides(puck)) {
+                    double[] deflectValues = deflect(player2.getXPosition(), player2.getYPosition(), player2.getXSpeed(), player2.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
+                    puck.setXSpeed(deflectValues[2]);
+                    puck.setYSpeed(deflectValues[3]);
+                    System.out.println(deflectValues[2]);
+                    System.out.println(deflectValues[3]);
+                }
+        
+        
+                // left side of boundary
+                if (puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) {
+                    // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
+                    puck.setXSpeed(puck.getXSpeed() * -1);
+                    // puck.setXSpeed(deflectValues[0]);
+                    // puck.setYSpeed(deflectValues[1]);
+                }
+                // top side of boundary
+                if (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) {
+                    // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
+                    puck.setYSpeed(puck.getYSpeed() * -1);
+                    // puck.setXSpeed(deflectValues[0]);
+                    // puck.setYSpeed(deflectValues[1]);
+                }
+                // right side of boundary
+                if (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) {
+                    // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
+                    puck.setXSpeed(puck.getXSpeed() * -1);
+                    // puck.setXSpeed(deflectValues[0]);
+                    // puck.setYSpeed(deflectValues[1]);
+                }
+                // bottom side of boundary
+                if (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2))) {
+                    // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
+                    puck.setYSpeed(puck.getYSpeed() * -1);
+                    // puck.setXSpeed(deflectValues[0]);
+                    // puck.setYSpeed(deflectValues[1]);
+                }
+        
+                puck.move(puck.getXSpeed(), puck.getYSpeed());
+        
+                try {
+                    Thread.sleep(gameSpeed);
+                } catch(Exception e) {
+                    System.out.println("Exception.");
+                }
+            }
+        }
+    };
+    Thread puckCollisionThread = new Thread(puckCollisionEngine);
+    puckCollisionThread.start();
+
     
-            
-
-    //             try {
-    //                 Thread.sleep(gameSpeed);
-    //             } catch (Exception e) {}
-    //         }
-    //     }
-    // };
-    // Thread puckBoundaryThread = new Thread(puckBoundaryEngine);
-    // puckBoundaryThread.start();
-    
-    
-
-    while(true) {
-        if(player1.collides(puck)) {
-            double[] deflectValues = deflect(player1.getXPosition(), player1.getYPosition(), player1.getXSpeed(), player1.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1);
-            puck.setXSpeed(deflectValues[2]);
-            puck.setYSpeed(deflectValues[3]);
-        }
-        if(player2.collides(puck)) {
-            double[] deflectValues = deflect(player2.getXPosition(), player2.getYPosition(), player2.getXSpeed(), player2.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1);
-            puck.setXSpeed(deflectValues[2]);
-            puck.setYSpeed(deflectValues[3]);
-        }
-
-
-        // left side of boundary
-        if (puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) {
-            // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
-            puck.setXSpeed(puck.getXSpeed() * -1);
-            // puck.setXSpeed(deflectValues[0]);
-            // puck.setYSpeed(deflectValues[1]);
-        }
-        // top side of boundary
-        if (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) {
-            // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
-            puck.setYSpeed(puck.getYSpeed() * -1);
-            // puck.setXSpeed(deflectValues[0]);
-            // puck.setYSpeed(deflectValues[1]);
-        }
-        // right side of boundary
-        if (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) {
-            // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 1000000);
-            puck.setXSpeed(puck.getXSpeed() * -1);
-            // puck.setXSpeed(deflectValues[0]);
-            // puck.setYSpeed(deflectValues[1]);
-        }
-        // bottom side of boundary
-        if (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2))) {
-            // double[] deflectValues = deflect(puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed(), 1, puck.getXPosition(), puck.getYPosition(), 0, 0, 100);
-            puck.setYSpeed(puck.getYSpeed() * -1);
-            // puck.setXSpeed(deflectValues[0]);
-            // puck.setYSpeed(deflectValues[1]);
-        }
-
-        puck.move(puck.getXSpeed(), puck.getYSpeed());
-
-        try {
-            Thread.sleep(gameSpeed);
-        } catch(Exception e) {
-            System.out.println("Exception.");
-        }
-    }
 
 
 }

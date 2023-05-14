@@ -74,10 +74,12 @@ public class Puck extends Ball{
 
     public void setXSpeed(double value) {
         this.xSpeed = value;
+        System.out.println("X speed changed to " + this.xSpeed);
     }
 
     public void setYSpeed(double value) {
         this.ySpeed = value;
+        System.out.println("Y speed changed to " + this.ySpeed);
     }
 
     public void setSpeedMultiplier(double value) {
