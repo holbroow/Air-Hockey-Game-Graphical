@@ -3,11 +3,7 @@
  * @author Will Holbrook
  */
 public class AirHockey {
-
-
 private static int gameSpeed = 1; // game speed - higher number means slower game speed (could use 'GameArena.pause()' but own solution worked well enough)
-private static int p1Score = 0; // player 1 score
-private static int p2Score = 0; // player 2 score
 
 /**
  * Calculates resultant trajectory/position of a Ball(or extended) object after 'collision'.
@@ -19,6 +15,7 @@ private static int p2Score = 0; // player 2 score
  * @param yPosition2
  * @param xSpeed2
  * @param ySpeed2
+ * @return
  */
 public static double[] deflect(double xPosition1, double yPosition1, double xSpeed1, double ySpeed1, double xPosition2, double yPosition2, double xSpeed2, double ySpeed2) {// method added and modified, originally pre-written for me 
     // all necessary variables re passed in to this function.
@@ -114,11 +111,14 @@ public static void main(String[] args) {
     Mallet player2 = new Mallet(850, 300, 50, "blue", 1);
     
     // Text Elements within the game
-    Text title = new Text("Air Hockey Game", 25, 25, 45, "white");
+    Text title = new Text("Air Hockey Game", 40, 25, 45, "white");
     Text player1ScoreText = new Text("0", 40, 25, 300, "white");
     Text player2ScoreText = new Text("0", 40, 1050, 300, "white");
     Text player1Wins = new Text("Player 1 wins the round!", 25, 25, 45, "green");
     Text player2Wins = new Text("Player 2 wins the round!", 25, 25, 45, "yellow");
+    Text player1WinsGame = new Text("Player 1 wins with 6 points! Press space to start a new game.", 25, 25, 45, "white");
+    Text player2WinsGame = new Text("Player 2 wins with 6 points! Press space to start a new game.", 25, 25, 45, "white");
+    
 
     // Adding all above elements into the 'Game Arena' named 'table'
     table.addRectangle(background);
@@ -168,10 +168,10 @@ public static void main(String[] args) {
                 if (table.rightPressed()) {
                     player2.move(1,0);
                 }
-                System.out.println(player1.getXSpeed() + " xSpeed for Player1");
-                System.out.println(player1.getYSpeed() + " ySpeed for Player1");
-                System.out.println(player2.getXSpeed() + " xSpeed for Player2");
-                System.out.println(player2.getYSpeed() + " ySpeed for Player2");
+                System.out.println(player1.getXSpeed() + " xSpeed for Player1"); //debug
+                System.out.println(player1.getYSpeed() + " ySpeed for Player1"); //debug
+                System.out.println(player2.getXSpeed() + " xSpeed for Player2"); //debug
+                System.out.println(player2.getYSpeed() + " ySpeed for Player2"); //debug
                 try {
                     Thread.sleep(gameSpeed);
                 } catch (Exception e) {}
@@ -207,7 +207,7 @@ public static void main(String[] args) {
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    // speedEngineThread.start();
+    //speedEngineThread.start();
 
     /**
      * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
@@ -262,9 +262,9 @@ public static void main(String[] args) {
             while (true) {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
-                        p2Score++;
+                        player2.setScore(player2.getScore() + 1);
                         
-                        player2ScoreText.setText(Integer.toString(p2Score));
+                        player2ScoreText.setText(Integer.toString(player2.getScore()));
                         table.removeText(title);
                         table.addText(player2Wins);
 
@@ -290,9 +290,9 @@ public static void main(String[] args) {
 
                 if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
                     if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
-                        p1Score++;
+                        player1.setScore(player1.getScore() + 1);
 
-                        player1ScoreText.setText(Integer.toString(p1Score));
+                        player1ScoreText.setText(Integer.toString(player1.getScore()));
                         table.removeText(title);
                         table.addText(player1Wins);
                         
@@ -313,6 +313,42 @@ public static void main(String[] args) {
                         table.addBall(player1);
                         table.addBall(player2);
                         table.addBall(puck);
+                    }
+                }
+
+                if (player1.getScore() == 1) {
+                    table.removeText(title);
+                    table.addText(player1WinsGame);
+                    if (table.letterPressed('b')) {
+                        table.addText(title);
+                        table.removeText(player1WinsGame); // not removing when called
+
+                        player1.resetPosition();
+                        player2.resetPosition();
+                        puck.resetPosition();
+
+                        player1.setScore(0);
+                        player1ScoreText.setText(Integer.toString(player1.getScore()));
+                        player2.setScore(0);
+                        player2ScoreText.setText(Integer.toString(player2.getScore()));
+                    }
+                }
+
+                if (player2.getScore() == 6) {
+                    table.removeText(title);
+                    table.addText(player2WinsGame);
+                    if (table.letterPressed('b')) {
+                        table.addText(title);
+                        table.removeText(player2WinsGame);
+
+                        player1.resetPosition();
+                        player2.resetPosition();
+                        puck.resetPosition();
+                        
+                        player1.setScore(0);
+                        player1ScoreText.setText(Integer.toString(player1.getScore()));
+                        player2.setScore(0);
+                        player2ScoreText.setText(Integer.toString(player2.getScore()));
                     }
                 }
 
@@ -340,8 +376,6 @@ public static void main(String[] args) {
                     double[] deflectValues = deflect(player2.getXPosition(), player2.getYPosition(), player2.getXSpeed(), player2.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
                     puck.setXSpeed(deflectValues[2]);
                     puck.setYSpeed(deflectValues[3]);
-                    System.out.println(deflectValues[2]);
-                    System.out.println(deflectValues[3]);
                 }
         
         
@@ -391,7 +425,5 @@ public static void main(String[] args) {
     try {
         Thread.sleep(gameSpeed);
     } catch (Exception e) {}
-
-
 }
 }
