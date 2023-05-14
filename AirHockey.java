@@ -4,7 +4,7 @@
 public class AirHockey {
 
 
-private static int gameSpeed = 1; // game speed - higher number means slower game speed
+private static int gameSpeed = 2; // game speed - higher number means slower game speed
 private static int p1Score = 0; // player 1 score
 private static int p2Score = 0; // player 2 score
 
@@ -109,13 +109,13 @@ public static void main(String[] args) {
 
     // 2 Players and Hockey puck
     Puck puck = new Puck(550, 300, 20, "black", 1);
-    Mallet player1 = new Mallet(250, 300, 50, "blue", 1);
-    Mallet player2 = new Mallet(850, 300, 50, "blue", 1);
+    Mallet player1 = new Mallet(250, 300, 50, "black", 1);
+    Mallet player2 = new Mallet(850, 300, 50, "black", 1);
     
     // Text Elements within the game
     Text title = new Text("Air Hockey Game", 25, 25, 45, "black");
-    Text player1Score = new Text("0", 40, 25, 300, "black");
-    Text player2Score = new Text("0", 40, 1050, 300, "black");
+    Text player1ScoreText = new Text("0", 40, 25, 300, "black");
+    Text player2ScoreText = new Text("0", 40, 1050, 300, "black");
 
     // Adding all above elements into the 'Game Arena' named 'table'
     table.addRectangle(background);
@@ -130,10 +130,14 @@ public static void main(String[] args) {
     table.addBall(player2);
     table.addBall(puck);
     table.addText(title);
-    table.addText(player1Score);
-    table.addText(player2Score);
+    table.addText(player1ScoreText);
+    table.addText(player2ScoreText);
 
-    // Movement for Player 1 & 2
+
+
+    /**
+     * Movement for Player 1 & 2
+     */
     Runnable movementEngine = new Runnable() {
         public void run() {
             while(true) {
@@ -174,33 +178,23 @@ public static void main(String[] args) {
     Thread movementEngineThread = new Thread(movementEngine);
     movementEngineThread.start();
 
-    // Speed engine for calculating multiplied speed over time with the Player mallets.
+    /**
+     * Speed engine for calculating multiplied speed over time with the Player mallets.
+     */
     Runnable speedEngine = new Runnable() {
         public void run() {
             while (true) {
                 while(table.letterPressed('a') || table.letterPressed('d')) {
-                    if (player1.getXSpeed() == 0) {
-                        player1.setXSpeed(1);
-                    }
-                    player1.setXSpeed(player1.getXSpeed() * 1.0000000001);
+                    player1.setXSpeed(player1.getXSpeed() * 1.00000000001);
                 }
                 while(table.letterPressed('w') || table.letterPressed('s')) {
-                    if (player1.getYSpeed() == 0) {
-                        player1.setYSpeed(1);
-                    }
-                    player1.setYSpeed(player1.getYSpeed() * 1.0000000001);
+                    player1.setYSpeed(player1.getYSpeed() * 1.00000000001);
                 }
                 while(table.leftPressed()|| table.rightPressed()) {
-                    if (player2.getXSpeed() == 0) {
-                        player2.setXSpeed(1);
-                    }
-                    player2.setXSpeed(player2.getXSpeed() * 1.0000000001);
+                    player2.setXSpeed(player2.getXSpeed() * 1.00000000001);
                 }
                 while(table.upPressed() || table.downPressed()) {
-                    if (player2.getYSpeed() == 0) {
-                        player2.setYSpeed(1);
-                    }
-                    player2.setYSpeed(player2.getYSpeed() * 1.0000000001);
+                    player2.setYSpeed(player2.getYSpeed() * 1.00000000001);
                 }
                 try {
                     Thread.sleep(gameSpeed);
@@ -209,9 +203,11 @@ public static void main(String[] args) {
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    speedEngineThread.start();
+    // speedEngineThread.start();   /*disabled due to issues for some odd reason*/
 
-    // Boundary engine for preventing the players from leaving their halves of the table or the table itself.
+    /**
+     * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
+     */
     Runnable playerBoundaryEngine = new Runnable() {
         public void run() {
             while (true) {
@@ -254,7 +250,9 @@ public static void main(String[] args) {
     Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
     playerBoundaryThread.start();
 
-    // Score engine for incrementing the respective player's score when the puck lands in their opponent's goal. //// need to add command to change the text objects accordingly.
+    /**
+     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal. //// need to add command to change the text objects accordingly.
+     */
     Runnable puckScoreEngine = new Runnable() {
         public void run() {
             while (true)
@@ -262,6 +260,7 @@ public static void main(String[] args) {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
                         p2Score++;
+                        player2ScoreText.setText(Integer.toString(p2Score));
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
@@ -271,6 +270,7 @@ public static void main(String[] args) {
                 if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
                     if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
                         p1Score++;
+                        player1ScoreText.setText(Integer.toString(p1Score));
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
@@ -284,9 +284,11 @@ public static void main(String[] args) {
         }
     };
     Thread puckScoreThread = new Thread(puckScoreEngine);
-    // puckScoreThread.start();
+    puckScoreThread.start();
 
-    // Boundary engine for preventing the puck from leaving the table and bouncing it off of said boundaries.
+    /**
+     * Boundary engine for preventing the puck from leaving the table and bouncing it off of said boundaries.
+     */
     Runnable puckCollisionEngine = new Runnable() {
         public void run() {
             while(true) {
@@ -347,6 +349,11 @@ public static void main(String[] args) {
     puckCollisionThread.start();
 
     
+
+
+    try {
+        Thread.sleep(gameSpeed);
+    } catch (Exception e) {}
 
 
 }

@@ -9,8 +9,8 @@ public class Mallet extends Ball {
     public Mallet(double x, double y, double diameter, String col) {
         super(x, y, diameter, col);
 
-		this.xSpeed = 0;
-		this.ySpeed = 0;
+		this.xSpeed = 1;
+		this.ySpeed = 1;
         this.speedMultiplier = 1;
 		this.originalXPosition = x;
 		this.originalYPosition = y;
@@ -19,8 +19,8 @@ public class Mallet extends Ball {
     public Mallet(double x, double y, double diameter, String col, int layer) {
 		super(x, y, diameter, col, layer);
 		
-		this.xSpeed = 0;
-		this.ySpeed = 0;
+		this.xSpeed = 1;
+		this.ySpeed = 1;
         this.speedMultiplier = 1;
         this.originalXPosition = x;
 		this.originalYPosition = y;
@@ -30,8 +30,8 @@ public class Mallet extends Ball {
         this.setXPosition(originalXPosition);
         this.setYPosition(originalYPosition);
         this.setSpeedMultiplier(1);
-        this.setXSpeed(0);
-        this.setYSpeed(0);
+        this.setXSpeed(1);
+        this.setYSpeed(1);
     }
 
     // calculateSpeed() {
