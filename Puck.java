@@ -1,3 +1,7 @@
+/**
+ * This class extends the 'Ball' class to create a specialised class for a Hockey 'Puck'.
+ * @author Will Holbrook
+ */
 public class Puck extends Ball{
 
     private double friction;

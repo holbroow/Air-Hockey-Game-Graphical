@@ -1,10 +1,11 @@
 /**
- * The main game class to run the 'Air Hockey' game.
+ * This class provides an environment to set-up and run the 'Air Hockey' game.
+ * @author Will Holbrook
  */
 public class AirHockey {
 
 
-private static int gameSpeed = 2; // game speed - higher number means slower game speed
+private static int gameSpeed = 1; // game speed - higher number means slower game speed (could use 'GameArena.pause()' but own solution worked well enough)
 private static int p1Score = 0; // player 1 score
 private static int p2Score = 0; // player 2 score
 
@@ -98,7 +99,7 @@ public static void main(String[] args) {
     GameArena table = new GameArena(1100, 600, true);
 
     // Air Hockey Table
-    Rectangle background = new Rectangle(0, 0, 1100, 600, "grey", 0);
+    Rectangle background = new Rectangle(0, 0, 1100, 600, "#000041" /* navy blue */, 0);
     Rectangle tableBorder = new Rectangle(100, 100, 900, 400, "black", 0);
     Rectangle tableSurface = new Rectangle(125, 125, 850, 350, "white", 0);
     Rectangle goal1 = new Rectangle(125, 212, 10, 175, "yellow", 0);
@@ -109,13 +110,15 @@ public static void main(String[] args) {
 
     // 2 Players and Hockey puck
     Puck puck = new Puck(550, 300, 20, "black", 1);
-    Mallet player1 = new Mallet(250, 300, 50, "black", 1);
-    Mallet player2 = new Mallet(850, 300, 50, "black", 1);
+    Mallet player1 = new Mallet(250, 300, 50, "blue", 1);
+    Mallet player2 = new Mallet(850, 300, 50, "blue", 1);
     
     // Text Elements within the game
-    Text title = new Text("Air Hockey Game", 25, 25, 45, "black");
-    Text player1ScoreText = new Text("0", 40, 25, 300, "black");
-    Text player2ScoreText = new Text("0", 40, 1050, 300, "black");
+    Text title = new Text("Air Hockey Game", 25, 25, 45, "white");
+    Text player1ScoreText = new Text("0", 40, 25, 300, "white");
+    Text player2ScoreText = new Text("0", 40, 1050, 300, "white");
+    Text player1Wins = new Text("Player 1 wins the round!", 25, 25, 45, "green");
+    Text player2Wins = new Text("Player 2 wins the round!", 25, 25, 45, "yellow");
 
     // Adding all above elements into the 'Game Arena' named 'table'
     table.addRectangle(background);
@@ -203,7 +206,7 @@ public static void main(String[] args) {
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    // speedEngineThread.start();   /*disabled due to issues for some odd reason*/
+    // speedEngineThread.start();   /*disabled due to issues*/
 
     /**
      * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
@@ -251,7 +254,7 @@ public static void main(String[] args) {
     playerBoundaryThread.start();
 
     /**
-     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal. //// need to add command to change the text objects accordingly.
+     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal.
      */
     Runnable puckScoreEngine = new Runnable() {
         public void run() {
@@ -260,20 +263,56 @@ public static void main(String[] args) {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
                         p2Score++;
+                        
                         player2ScoreText.setText(Integer.toString(p2Score));
+                        table.removeText(title);
+                        table.addText(player2Wins);
+
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
+
+                        table.removeBall(player1);
+                        table.removeBall(player2);
+                        table.removeBall(puck);
+
+                        try {
+                            Thread.sleep(2200);
+                        } catch (Exception e) {}
+                        table.removeText(player2Wins);
+                        table.addText(title);
+
+                        table.addBall(player1);
+                        table.addBall(player2);
+                        table.addBall(puck);
                     }
                 }
 
                 if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
                     if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
                         p1Score++;
+
                         player1ScoreText.setText(Integer.toString(p1Score));
+                        table.removeText(title);
+                        table.addText(player1Wins);
+                        
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
+
+                        table.removeBall(player1);
+                        table.removeBall(player2);
+                        table.removeBall(puck);
+
+                        try {
+                            Thread.sleep(2200);
+                        } catch (Exception e) {}
+                        table.removeText(player1Wins);
+                        table.addText(title);
+
+                        table.addBall(player1);
+                        table.addBall(player2);
+                        table.addBall(puck);
                     }
                 }
 

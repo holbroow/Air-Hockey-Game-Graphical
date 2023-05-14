@@ -1,3 +1,7 @@
+/**
+ * This class extends the 'Ball' class to create a specialised class for a Hockey 'Mallet'.
+ * @author Will Holbrook
+ */
 public class Mallet extends Ball {
     
     private double speedMultiplier;
