@@ -1,10 +1,12 @@
 
 public class AirHockey {
 
-public static int gameSpeed = 1; // higher number means slower game speed
+private static int gameSpeed = 1; // higher number means slower game speed
+private static int p1Score = 0;
+private static int p2Score = 0;
 
 
-public static void deflect(Ball ball1, Ball ball2) {// method added and modified, originally pre-written for me
+public static void deflect(Ball ball1, Ball ball2) {// method added and modified, originally pre-written for me 
     // The position and speed of each of the two balls in the x and y axis before collision.
     double xPosition1 = ball1.getXPosition();
     double yPosition1 = ball1.getYPosition();
@@ -70,6 +72,10 @@ private static double[] normalizeVector(double[] vec) {
         }
     }
     return result;
+}
+
+public static void resetGame() {
+    
 }
 
 
@@ -180,7 +186,7 @@ public static void main(String[] args) {
         Thread speedEngineThread = new Thread(speedEngine);
         speedEngineThread.start();
 
-        // Collision engine for preventing the players from leaving their halves of the table or the table itself.
+        // Boundary engine for preventing the players from leaving their halves of the table or the table itself.
         Runnable playerBoundaryEngine = new Runnable() {
             public void run() {
                 while (true) {
@@ -223,6 +229,35 @@ public static void main(String[] args) {
         Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
         playerBoundaryThread.start();
 
+        // Score engine for incrementing the respective player's score when the puck lands in their opponent's goal.
+        Runnable puckScoreEngine = new Runnable() {
+            public void run() {
+                if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
+                    if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
+                        p2Score++;
+                        player1.resetPosition();
+                        player2.resetPosition();
+                        puck.resetPosition();
+                    }
+                }
+
+                if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
+                    if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
+                        p1Score++;
+                        player1.resetPosition();
+                        player2.resetPosition();
+                        puck.resetPosition();
+                    }
+                }
+
+                try {
+                    Thread.sleep(gameSpeed);
+                } catch (Exception e) {}
+            }
+        };
+        Thread puckScoreThread = new Thread(puckScoreEngine);
+        puckScoreThread.start();
+
         // while(true) {
         //     if (player1.collides(puck)) {
         //         puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
@@ -236,15 +271,18 @@ public static void main(String[] args) {
         //         System.out.println("Exception.");
         //     }
         // }
+        
+        
 
-        while(true) {
-            puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
-            try {
-                Thread.sleep(gameSpeed);
-            } catch(Exception e) {
-                System.out.println("Exception.");
-            }
-        }
+
+        // while(true) {
+        //     puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
+        //     try {
+        //         Thread.sleep(gameSpeed);
+        //     } catch(Exception e) {
+        //         System.out.println("Exception.");
+        //     }
+        // }
 
     }
 }

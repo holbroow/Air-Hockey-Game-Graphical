@@ -22,7 +22,8 @@ public class Ball
 
 	private double xSpeed;
 	private double ySpeed;
-	private double mass;
+	private double originalXPosition;
+	private double originalYPosition;
 
 	/**
 	 * Constructor for the Ball class. Sets a default layer of 0.
@@ -41,6 +42,8 @@ public class Ball
 
 		this.xSpeed = 1;
 		this.ySpeed = 1;
+		this.originalXPosition = x;
+		this.originalYPosition = y;
 	}	
 
 	/**
@@ -191,11 +194,6 @@ public class Ball
 		return ySpeed;
 	}
 
-	public double getMass()
-	{
-		return mass;
-	}
-
 	public void changeXSpeed(double newXSpeed)
 	{
 		System.out.println("XSPEED CHANGEED " + newXSpeed);
@@ -208,12 +206,17 @@ public class Ball
 		ySpeed = newYSpeed;
 	}
 
-	public void calculateSpeed()
-	{
-		// idea is to track the position of the player's paddle (ball.player1/ball.player2) over a period of time (probably while it is moving) and then
-		// to calculate the player's speed from that. (Maybe the longer the player ball is travelling the faster it gets, before hitting the puck at that final speed value???)
+	// public void calculateSpeed()
+	// {
+	// 	// idea is to track the position of the player's paddle (ball.player1/ball.player2) over a period of time (probably while it is moving) and then
+	// 	// to calculate the player's speed from that. (Maybe the longer the player ball is travelling the faster it gets, before hitting the puck at that final speed value???)
 
 		
+	// }
+
+	public void resetPosition() {
+		this.setXPosition(originalXPosition);
+		this.setYPosition(originalYPosition);
 	}
 	
 }
