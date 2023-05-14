@@ -20,10 +20,6 @@ public class Ball
 										// GREEN, LIGHTGREY, MAGENTA, ORANGE,
 										// PINK, RED, WHITE, YELLOW, BROWN
 
-	private double xSpeed;
-	private double ySpeed;
-	private double originalXPosition;
-	private double originalYPosition;
 
 	/**
 	 * Constructor for the Ball class. Sets a default layer of 0.
@@ -39,11 +35,6 @@ public class Ball
 		this.size = diameter;
 		this.colour = col;
 		this.layer = 0;
-
-		this.xSpeed = 1;
-		this.ySpeed = 1;
-		this.originalXPosition = x;
-		this.originalYPosition = y;
 	}	
 
 	/**
@@ -61,9 +52,6 @@ public class Ball
 		this.size = diameter;
 		this.colour = col;
 		this.layer = layer;
-		
-		this.xSpeed = 1;
-		this.ySpeed = 1;
 	}	
 
 	/**
@@ -182,41 +170,6 @@ public class Ball
 		double distance = Math.sqrt(dx*dx+dy*dy);
 
 		return distance < size/2 + b.size/2;
-	}
-
-	public double getXSpeed()
-	{
-		return xSpeed;
-	}
-
-	public double getYSpeed()
-	{
-		return ySpeed;
-	}
-
-	public void changeXSpeed(double newXSpeed)
-	{
-		System.out.println("XSPEED CHANGEED " + newXSpeed);
-		xSpeed = newXSpeed;
-	}
-
-	public void changeYSpeed(double newYSpeed)
-	{
-		System.out.println("YSPEED CHANGEED " + newYSpeed);
-		ySpeed = newYSpeed;
-	}
-
-	// public void calculateSpeed()
-	// {
-	// 	// idea is to track the position of the player's paddle (ball.player1/ball.player2) over a period of time (probably while it is moving) and then
-	// 	// to calculate the player's speed from that. (Maybe the longer the player ball is travelling the faster it gets, before hitting the puck at that final speed value???)
-
-		
-	// }
-
-	public void resetPosition() {
-		this.setXPosition(originalXPosition);
-		this.setYPosition(originalYPosition);
 	}
 	
 }

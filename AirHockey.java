@@ -1,22 +1,25 @@
-
+/**
+ * The main game class to run the 'Air Hockey' game.
+ */
 public class AirHockey {
 
-private static int gameSpeed = 1; // higher number means slower game speed
-private static int p1Score = 0;
-private static int p2Score = 0;
+private static int gameSpeed = 1; // game speed - higher number means slower game speed
+private static int p1Score = 0; // player 1 score
+private static int p2Score = 0; // player 2 score
 
-
-public static void deflect(Ball ball1, Ball ball2) {// method added and modified, originally pre-written for me 
-    // The position and speed of each of the two balls in the x and y axis before collision.
-    double xPosition1 = ball1.getXPosition();
-    double yPosition1 = ball1.getYPosition();
-    double xSpeed1 = ball1.getXSpeed();
-    double ySpeed1 = ball1.getYSpeed();
-    double xPosition2 = ball2.getXPosition();
-    double yPosition2 = ball2.getYPosition();
-    double xSpeed2 = ball2.getXSpeed();
-    double ySpeed2 = ball2.getYSpeed();
-    
+/**
+ * Calculates resultant trajectory/position of a Ball(or extended) object after 'collision'.
+ * @param xPosition1
+ * @param yPosition1
+ * @param xSpeed1
+ * @param ySpeed1
+ * @param xPosition2
+ * @param yPosition2
+ * @param xSpeed2
+ * @param ySpeed2
+ */
+public static void deflect(double xPosition1, double yPosition1, double xSpeed1, double ySpeed1, double xPosition2, double yPosition2, double xSpeed2, double ySpeed2) {// method added and modified, originally pre-written for me 
+    // all necessary variables re passed in to this function.
 
     // Calculate initial momentum of the balls... We assume unit mass here.
     double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
@@ -43,6 +46,7 @@ public static void deflect(Ball ball1, Ball ball2) {// method added and modified
     // Scale the resultant trajectories if we've accidentally broken the laws of physics.
     double mag = (p1InitialMomentum + p2InitialMomentum) / (p1FinalMomentum + p2FinalMomentum);
     // Calculate the final x and y speed settings for the two balls after collision.
+    // *NOTE* we only need the x/y speed for the puck, not the mallet.
     xSpeed1 = p1FinalTrajectory[0] * mag;
     ySpeed1 = p1FinalTrajectory[1] * mag;
     xSpeed2 = p2FinalTrajectory[0] * mag;
@@ -52,6 +56,8 @@ public static void deflect(Ball ball1, Ball ball2) {// method added and modified
 /**
  * Converts a vector into a unit vector.
  * Used by the deflect() method to calculate the resultant direction after a collision.
+ * @param vec
+ * @return
  */
 private static double[] normalizeVector(double[] vec) {
     double mag = 0.0;
@@ -74,11 +80,6 @@ private static double[] normalizeVector(double[] vec) {
     return result;
 }
 
-public static void resetGame() {
-    
-}
-
-
 public static void main(String[] args) {
         // Game window (Game Arena named 'table')
         GameArena table = new GameArena(1100, 600, true);
@@ -94,9 +95,9 @@ public static void main(String[] args) {
         Ball centreRing = new Ball(550, 300, 68, "white", 0);
 
         // 2 Players and Hockey puck
-        Ball puck = new Ball(550, 300, 20, "black", 1);
-        Ball player1 = new Ball(250, 300, 50, "blue", 1);
-        Ball player2 = new Ball(850, 300, 50, "blue", 1);
+        Puck puck = new Puck(550, 300, 20, "black", 1);
+        Mallet player1 = new Mallet(250, 300, 50, "blue", 1);
+        Mallet player2 = new Mallet(850, 300, 50, "blue", 1);
         
         // Text Elements within the game
         Text title = new Text("Air Hockey Game", 25, 25, 45, "black");
@@ -166,16 +167,16 @@ public static void main(String[] args) {
             public void run() {
                 while (true) {
                     while(table.letterPressed('a') || table.letterPressed('d')) {
-                        player1.changeXSpeed(player1.getXSpeed() * 1.00000000001);
+                        player1.setXSpeed(player1.getXSpeed() * 1.00000000001);
                     }
                     while(table.letterPressed('w') || table.letterPressed('s')) {
-                        player1.changeYSpeed(player1.getYSpeed() * 1.00000000001);
+                        player1.setYSpeed(player1.getYSpeed() * 1.00000000001);
                     }
                     while(table.leftPressed()|| table.rightPressed()) {
-                        player2.changeXSpeed(player2.getXSpeed() * 1.00000000001);
+                        player2.setXSpeed(player2.getXSpeed() * 1.00000000001);
                     }
                     while(table.upPressed() || table.downPressed()) {
-                        player2.changeYSpeed(player2.getYSpeed() * 1.00000000001);
+                        player2.setYSpeed(player2.getYSpeed() * 1.00000000001);
                     }
                     try {
                         Thread.sleep(gameSpeed);
@@ -229,7 +230,7 @@ public static void main(String[] args) {
         Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
         playerBoundaryThread.start();
 
-        // Score engine for incrementing the respective player's score when the puck lands in their opponent's goal.
+        // Score engine for incrementing the respective player's score when the puck lands in their opponent's goal. //// need to add command to change the text objects accordingly.
         Runnable puckScoreEngine = new Runnable() {
             public void run() {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
@@ -272,17 +273,21 @@ public static void main(String[] args) {
         //     }
         // }
         
-        
+        puck.setXSpeed(1);
+        puck.setYSpeed(1);
+
+        while(true) {
+            puck.move(puck.getXSpeed(), puck.getYSpeed());
+
+            try {
+                Thread.sleep(gameSpeed);
+            } catch(Exception e) {
+                System.out.println("Exception.");
+            }
+        }
 
 
-        // while(true) {
-        //     puck.move(player1.getXSpeed(), player1.getYSpeed()); //maybe
-        //     try {
-        //         Thread.sleep(gameSpeed);
-        //     } catch(Exception e) {
-        //         System.out.println("Exception.");
-        //     }
-        // }
+
 
     }
 }
