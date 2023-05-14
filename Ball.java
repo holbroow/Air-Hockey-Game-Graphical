@@ -171,5 +171,4 @@ public class Ball
 
 		return distance < size/2 + b.size/2;
 	}
-
 }

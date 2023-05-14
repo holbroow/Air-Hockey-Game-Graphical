@@ -183,6 +183,7 @@ public static void main(String[] args) {
 
     /**
      * Speed engine for calculating multiplied speed over time with the Player mallets.
+     * DISABLED DUE TO ISSUES
      */
     Runnable speedEngine = new Runnable() {
         public void run() {
@@ -206,7 +207,7 @@ public static void main(String[] args) {
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    // speedEngineThread.start();   /*disabled due to issues*/
+    // speedEngineThread.start();
 
     /**
      * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
@@ -254,12 +255,11 @@ public static void main(String[] args) {
     playerBoundaryThread.start();
 
     /**
-     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal.
+     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal, and determining eventual winner.
      */
-    Runnable puckScoreEngine = new Runnable() {
+    Runnable scoreEngine = new Runnable() {
         public void run() {
-            while (true)
-            {
+            while (true) {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
                         p2Score++;
@@ -322,11 +322,11 @@ public static void main(String[] args) {
             }
         }
     };
-    Thread puckScoreThread = new Thread(puckScoreEngine);
-    puckScoreThread.start();
+    Thread scoreThread = new Thread(scoreEngine);
+    scoreThread.start();
 
     /**
-     * Boundary engine for preventing the puck from leaving the table and bouncing it off of said boundaries.
+     * Boundary engine for bouncing puck off of table boundaries and 'Mallet' objects.
      */
     Runnable puckCollisionEngine = new Runnable() {
         public void run() {
@@ -378,9 +378,7 @@ public static void main(String[] args) {
         
                 try {
                     Thread.sleep(gameSpeed);
-                } catch(Exception e) {
-                    System.out.println("Exception.");
-                }
+                } catch(Exception e) {}
             }
         }
     };
