@@ -188,7 +188,6 @@ public static void main(String[] args) {
         }
     };
     Thread movementEngineThread = new Thread(movementEngine);
-    movementEngineThread.start();
 
     /**
      * Calculate and determine speed for PLayer Mallets for use with deflect().
@@ -227,7 +226,6 @@ public static void main(String[] args) {
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    speedEngineThread.start();
 
     /**
      * Preventing the players from leaving their halves of the table or the table itself.
@@ -272,7 +270,6 @@ public static void main(String[] args) {
         }
     };
     Thread playerBoundaryThread = new Thread(playerBoundaryEngine);
-    playerBoundaryThread.start();
 
     /**
      * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal, and determining eventual winner.           //// issues ////
@@ -396,7 +393,6 @@ public static void main(String[] args) {
         }
     };
     Thread scoreThread = new Thread(scoreEngine);
-    scoreThread.start();
 
     /**
      * Boundary engine for bouncing puck off of table boundaries and 'Mallet' objects.
@@ -456,7 +452,6 @@ public static void main(String[] args) {
         }
     };
     Thread puckCollisionThread = new Thread(puckCollisionEngine);
-    puckCollisionThread.start();
 
     /**
      * Friction engine for allowing the puck to slow down due to slight friction.
@@ -477,7 +472,6 @@ public static void main(String[] args) {
         }
     };
     Thread puckFrictionThread = new Thread(puckFrictionEngine);
-    puckFrictionThread.start();
 
     /**
      * Sound engine for playing sounds such as deflection sounds, hit sounds, and celebratory sounds.
@@ -521,9 +515,19 @@ public static void main(String[] args) {
         }
     };
     Thread soundThread = new Thread(soundEngine);
+    
+
+    // players (mallets)
+    movementEngineThread.start();
+    speedEngineThread.start();
+    playerBoundaryThread.start();
+    // keeping score
+    scoreThread.start();
+    // the puck (puck)
+    puckCollisionThread.start();
+    puckFrictionThread.start();
+    // sound effects
     soundThread.start();
-
-
 
 }
 }
