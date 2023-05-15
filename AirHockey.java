@@ -116,8 +116,8 @@ public static void main(String[] args) {
     Text player2ScoreText = new Text("0", 40, 1050, 300, "white");
     Text player1Wins = new Text("Player 1 wins the round!", 25, 25, 45, "green");
     Text player2Wins = new Text("Player 2 wins the round!", 25, 25, 45, "yellow");
-    Text player1WinsGame = new Text("Player 1 wins with 6 points! Press space to start a new game.", 25, 25, 45, "white");
-    Text player2WinsGame = new Text("Player 2 wins with 6 points! Press space to start a new game.", 25, 25, 45, "white");
+    Text player1WinsGame = new Text("Player 1 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white");
+    Text player2WinsGame = new Text("Player 2 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white");
     
 
     // Adding all above elements into the 'Game Arena' named 'table'
@@ -319,10 +319,18 @@ public static void main(String[] args) {
                 if (player1.getScore() == 1) {
                     table.removeText(title);
                     table.addText(player1WinsGame);
-                    if (table.letterPressed('b')) {
-                        table.addText(title);
-                        table.removeText(player1WinsGame); // not removing when called
 
+                    table.removeBall(player1);
+                    table.removeBall(player2);
+                    table.removeBall(puck);
+
+                    if (table.spacePressed()) {
+                        table.removeText(player1WinsGame);       // not removing when called.
+                        table.addText(title);
+
+                        table.addBall(player1);
+                        table.addBall(player2);
+                        table.addBall(puck);
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
@@ -332,15 +340,21 @@ public static void main(String[] args) {
                         player2.setScore(0);
                         player2ScoreText.setText(Integer.toString(player2.getScore()));
                     }
-                }
-
-                if (player2.getScore() == 6) {
+                } else if (player2.getScore() == 6) {
                     table.removeText(title);
                     table.addText(player2WinsGame);
-                    if (table.letterPressed('b')) {
-                        table.addText(title);
-                        table.removeText(player2WinsGame);
 
+                    table.removeBall(player1);
+                    table.removeBall(player2);
+                    table.removeBall(puck);
+
+                    if (table.spacePressed()) {
+                        table.removeText(player2WinsGame);      // not removing when called.
+                        table.addText(title);
+
+                        table.addBall(player1);
+                        table.addBall(player2);
+                        table.addBall(puck);
                         player1.resetPosition();
                         player2.resetPosition();
                         puck.resetPosition();
