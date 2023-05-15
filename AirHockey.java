@@ -3,7 +3,6 @@
  * @author Will Holbrook
  */
 public class AirHockey {
-private static int gameSpeed = 1; // game speed - higher number means slower game speed (could use 'GameArena.pause()' but own solution worked well enough)
 
 /**
  * Calculates resultant trajectory/position of a Ball(or extended) object after 'collision'.
@@ -139,7 +138,7 @@ public static void main(String[] args) {
 
 
     /**
-     * Movement for Player 1 & 2
+     * Movement for Player 1 & 2.
      */
     Runnable movementEngine = new Runnable() {
         public void run() {
@@ -173,7 +172,7 @@ public static void main(String[] args) {
                 System.out.println(player2.getXSpeed() + " xSpeed for Player2"); //debug
                 System.out.println(player2.getYSpeed() + " ySpeed for Player2"); //debug
                 try {
-                    Thread.sleep(gameSpeed);
+                    Thread.sleep(1);
                 } catch (Exception e) {}
             }
         }
@@ -182,8 +181,7 @@ public static void main(String[] args) {
     movementEngineThread.start();
 
     /**
-     * Speed engine for calculating multiplied speed over time with the Player mallets.                                                                     //// issues ////
-     * DISABLED DUE TO ISSUES
+     * Calculate and determine speed for PLayer Mallets for use with deflect().
      */
     Runnable speedEngine = new Runnable() {
         public void run() {
@@ -213,7 +211,7 @@ public static void main(String[] args) {
                 }
             
                 try {
-                    Thread.sleep(gameSpeed);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {}
             }
         }
@@ -222,7 +220,7 @@ public static void main(String[] args) {
     speedEngineThread.start();
 
     /**
-     * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
+     * Preventing the players from leaving their halves of the table or the table itself.
      */
     Runnable playerBoundaryEngine = new Runnable() {
         public void run() {
@@ -258,7 +256,7 @@ public static void main(String[] args) {
                 }
 
                 try {
-                    Thread.sleep(gameSpeed);
+                    Thread.sleep(1);
                 } catch (Exception e) {}
             }
         }
@@ -379,7 +377,7 @@ public static void main(String[] args) {
                 }
 
                 try {
-                    Thread.sleep(gameSpeed);
+                    Thread.sleep(1);
                 } catch (Exception e) {}
             }
         }
@@ -435,9 +433,11 @@ public static void main(String[] args) {
                 }
         
                 puck.move(puck.getXSpeed(), puck.getYSpeed());
+
+                
         
                 try {
-                    Thread.sleep(gameSpeed);
+                    Thread.sleep(1);
                 } catch(Exception e) {}
             }
         }
@@ -445,25 +445,29 @@ public static void main(String[] args) {
     Thread puckCollisionThread = new Thread(puckCollisionEngine);
     puckCollisionThread.start();
 
-
-    while(true) {
-        if (puck.getXSpeed() > 0) {
-            puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+    /**
+     * Friction engine for allowing the puck to slow down due to slight friction.
+     */
+    Runnable puckFrictionEngine = new Runnable() {
+        public void run() {
+            while(true) {
+                if (puck.getXSpeed() > 0) { // friction statements to allow the puck to slow down over time
+                    puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+                }
+                if (puck.getYSpeed() > 0) {
+                    puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+                }
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {}
+            }
         }
-        if (puck.getYSpeed() > 0) {
-            puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
-        }
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {}
-    }
+    };
+    Thread puckFrictionThread = new Thread(puckFrictionEngine);
+    puckFrictionThread.start();
+
+    
 
 
-
-
-
-    // try {
-    //     Thread.sleep(gameSpeed);
-    // } catch (Exception e) {}
 }
 }
