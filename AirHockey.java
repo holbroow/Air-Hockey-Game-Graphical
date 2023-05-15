@@ -111,13 +111,13 @@ public static void main(String[] args) {
     Mallet player2 = new Mallet(850, 300, 50, "blue", 1);
     
     // Text Elements within the game
-    Text title = new Text("Air Hockey Game", 40, 25, 45, "white");
-    Text player1ScoreText = new Text("0", 40, 25, 300, "white");
+    Text title = new Text("Air Hockey Game", 40, 25, 45, "white", 0);
+    Text player1ScoreText = new Text("0", 40, 25, 300, "white", 0);
     Text player2ScoreText = new Text("0", 40, 1050, 300, "white");
-    Text player1Wins = new Text("Player 1 wins the round!", 25, 25, 45, "green");
-    Text player2Wins = new Text("Player 2 wins the round!", 25, 25, 45, "yellow");
-    Text player1WinsGame = new Text("Player 1 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white");
-    Text player2WinsGame = new Text("Player 2 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white");
+    Text player1Wins = new Text("Player 1 wins the round!", 25, 25, 45, "green", 0);
+    Text player2Wins = new Text("Player 2 wins the round!", 25, 25, 45, "yellow", 0);
+    Text player1WinsGame = new Text("Player 1 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white", 0);
+    Text player2WinsGame = new Text("Player 2 wins with 6 points! Press space to start a new game.", 20, 25, 45, "white", 0);
     
 
     // Adding all above elements into the 'Game Arena' named 'table'
@@ -182,32 +182,44 @@ public static void main(String[] args) {
     movementEngineThread.start();
 
     /**
-     * Speed engine for calculating multiplied speed over time with the Player mallets.
+     * Speed engine for calculating multiplied speed over time with the Player mallets.                                                                     //// issues ////
      * DISABLED DUE TO ISSUES
      */
     Runnable speedEngine = new Runnable() {
         public void run() {
             while (true) {
-                while(table.letterPressed('a') || table.letterPressed('d')) {
-                    player1.setXSpeed(player1.getXSpeed() * 1.00000000001);
+                if (table.letterPressed('a') || table.letterPressed('d')) {
+                    player1.setXSpeed(player1.getXSpeed() + player1.getSpeedMultiplier());
+                } else {
+                    player1.setXSpeed(0);
                 }
-                while(table.letterPressed('w') || table.letterPressed('s')) {
-                    player1.setYSpeed(player1.getYSpeed() * 1.00000000001);
+            
+                if (table.letterPressed('w') || table.letterPressed('s')) {
+                    player1.setYSpeed(player1.getYSpeed() + player1.getSpeedMultiplier());
+                } else {
+                    player1.setYSpeed(0);
                 }
-                while(table.leftPressed()|| table.rightPressed()) {
-                    player2.setXSpeed(player2.getXSpeed() * 1.00000000001);
+            
+                if (table.leftPressed() || table.rightPressed()) {
+                    player2.setXSpeed(player2.getXSpeed() + player2.getSpeedMultiplier());
+                } else {
+                    player2.setXSpeed(0);
                 }
-                while(table.upPressed() || table.downPressed()) {
-                    player2.setYSpeed(player2.getYSpeed() * 1.00000000001);
+            
+                if (table.upPressed() || table.downPressed()) {
+                    player2.setYSpeed(player2.getYSpeed() + player2.getSpeedMultiplier());
+                } else {
+                    player2.setYSpeed(0);
                 }
+            
                 try {
                     Thread.sleep(gameSpeed);
-                } catch (Exception e) {}
+                } catch (InterruptedException e) {}
             }
         }
     };
     Thread speedEngineThread = new Thread(speedEngine);
-    //speedEngineThread.start();
+    speedEngineThread.start();
 
     /**
      * Boundary engine for preventing the players from leaving their halves of the table or the table itself.
@@ -255,7 +267,7 @@ public static void main(String[] args) {
     playerBoundaryThread.start();
 
     /**
-     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal, and determining eventual winner.
+     * Score engine for incrementing the respective player's score when the puck lands in their opponent's goal, and determining eventual winner.           //// issues ////
      */
     Runnable scoreEngine = new Runnable() {
         public void run() {
@@ -433,11 +445,25 @@ public static void main(String[] args) {
     Thread puckCollisionThread = new Thread(puckCollisionEngine);
     puckCollisionThread.start();
 
-    
+
+    while(true) {
+        if (puck.getXSpeed() > 0) {
+            puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+        }
+        if (puck.getYSpeed() > 0) {
+            puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+        }
+        try {
+            Thread.sleep(10);
+        } catch (Exception e) {}
+    }
 
 
-    try {
-        Thread.sleep(gameSpeed);
-    } catch (Exception e) {}
+
+
+
+    // try {
+    //     Thread.sleep(gameSpeed);
+    // } catch (Exception e) {}
 }
 }

@@ -11,17 +11,23 @@ public class Puck extends Ball{
     private double originalXPosition;
     private double originalYPosition;
     private double originalFriction;
+    private double originalSpeedMultiplier;
+    private double originalXSpeed;
+    private double originalYSpeed;
 
     public Puck(double x, double y, double diameter, String col) {
         super(x, y, diameter, col);
 
 		this.xSpeed = 0;
 		this.ySpeed = 0;
-        this.friction = 0.8;
+        this.friction = 0.99;
         this.speedMultiplier = 1;
 		this.originalXPosition = x;
 		this.originalYPosition = y;
         this.originalFriction = friction;
+        this.originalSpeedMultiplier = speedMultiplier;
+        this.originalXSpeed = xSpeed;
+        this.originalYSpeed = ySpeed;
 	}	
     
     public Puck(double x, double y, double diameter, String col, int layer) {
@@ -29,63 +35,106 @@ public class Puck extends Ball{
 		
 		this.xSpeed = 0;
 		this.ySpeed = 0;
-        this.friction = 0.8;
+        this.friction = 0.99;
         this.speedMultiplier = 1;
         this.originalXPosition = x;
 		this.originalYPosition = y;
         this.originalFriction = friction;
+        this.originalSpeedMultiplier = speedMultiplier;
+        this.originalXSpeed = xSpeed;
+        this.originalYSpeed = ySpeed;
 	}
 
     public void resetPosition() {
         this.setXPosition(originalXPosition);
         this.setYPosition(originalYPosition);
         this.setFriction(originalFriction);
-        this.setSpeedMultiplier(1);
-        this.setXSpeed(0);
-        this.setYSpeed(0);
+        this.setSpeedMultiplier(originalSpeedMultiplier);
+        this.setXSpeed(originalXSpeed);
+        this.setYSpeed(originalYSpeed);
     }
 
 
     // accessors
     public double getFriction() {
-        return this.friction;
+        return friction;
+    }
+
+    public double getSpeedMultiplier() {
+        return speedMultiplier;
     }
 
     public double getXSpeed() {
-        return this.xSpeed;
+        return xSpeed;
     }
 
     public double getYSpeed() {
-        return this.ySpeed;
+        return ySpeed;
     }
 
     public double getOriginalXPosition() {
-        return this.originalXPosition;
+        return originalXPosition;
     }
 
     public double getOriginalYPosition() {
-        return this.originalYPosition;
+        return originalYPosition;
     }
-    
-    public double getSpeedMultiplier() {
-        return this.speedMultiplier;
+
+    public double getOriginalFriction() {
+        return originalFriction;
+    }
+
+    public double getOriginalSpeedMultiplier() {
+        return originalSpeedMultiplier;
+    }
+
+    public double getOriginalXSpeed() {
+        return originalXSpeed;
+    }
+
+    public double getOriginalYSpeed() {
+        return originalYSpeed;
     }
 
     // mutators
-    public void setFriction(double value) {
-        this.friction = value;
+    public void setFriction(double friction) {
+        this.friction = friction;
     }
 
-    public void setXSpeed(double value) {
-        this.xSpeed = value;
+    public void setSpeedMultiplier(double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
     }
 
-    public void setYSpeed(double value) {
-        this.ySpeed = value;
+    public void setXSpeed(double xSpeed) {
+        this.xSpeed = xSpeed;
     }
 
-    public void setSpeedMultiplier(double value) {
-        this.speedMultiplier = value;
+    public void setYSpeed(double ySpeed) {
+        this.ySpeed = ySpeed;
+    }
+
+    public void setOriginalXPosition(double originalXPosition) {
+        this.originalXPosition = originalXPosition;
+    }
+
+    public void setOriginalYPosition(double originalYPosition) {
+        this.originalYPosition = originalYPosition;
+    }
+
+    public void setOriginalFriction(double originalFriction) {
+        this.originalFriction = originalFriction;
+    }
+
+    public void setOriginalSpeedMultiplier(double originalSpeedMultiplier) {
+        this.originalSpeedMultiplier = originalSpeedMultiplier;
+    }
+
+    public void setOriginalXSpeed(double originalXSpeed) {
+        this.originalXSpeed = originalXSpeed;
+    }
+
+    public void setOriginalYSpeed(double originalYSpeed) {
+        this.originalYSpeed = originalYSpeed;
     }
 
 }
