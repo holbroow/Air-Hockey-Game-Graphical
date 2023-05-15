@@ -1,3 +1,5 @@
+import java.io.File;
+
 /**
  * This class provides an environment to set-up and run the 'Air Hockey' game.
  * @author Will Holbrook
@@ -135,6 +137,14 @@ public static void main(String[] args) {
     table.addText(player1ScoreText);
     table.addText(player2ScoreText);
 
+    File applause = new File("applause.wav");
+    File bounce = new File("bounce.wav");
+    File drumroll = new File("drumroll.wav");
+    File fanfare = new File("fanfare.wav");
+    File hit = new File("hit.wav");
+    SoundPlayer soundPlayer = new SoundPlayer();
+
+    soundPlayer.playAudio(fanfare);
 
 
     /**
@@ -326,7 +336,7 @@ public static void main(String[] args) {
                     }
                 }
 
-                if (player1.getScore() == 1) {
+                if (player1.getScore() == 6) {
                     table.removeText(title);
                     table.addText(player1WinsGame);
 
@@ -335,6 +345,7 @@ public static void main(String[] args) {
                     table.removeBall(puck);
 
                     if (table.spacePressed()) {
+                        soundPlayer.playAudio(fanfare);
                         table.removeText(player1WinsGame);       // not removing when called.
                         table.addText(title);
 
@@ -350,7 +361,8 @@ public static void main(String[] args) {
                         player2.setScore(0);
                         player2ScoreText.setText(Integer.toString(player2.getScore()));
                     }
-                } else if (player2.getScore() == 6) {
+                } 
+                else if (player2.getScore() == 6) {
                     table.removeText(title);
                     table.addText(player2WinsGame);
 
@@ -359,6 +371,7 @@ public static void main(String[] args) {
                     table.removeBall(puck);
 
                     if (table.spacePressed()) {
+                        soundPlayer.playAudio(fanfare);
                         table.removeText(player2WinsGame);      // not removing when called.
                         table.addText(title);
 
@@ -466,7 +479,50 @@ public static void main(String[] args) {
     Thread puckFrictionThread = new Thread(puckFrictionEngine);
     puckFrictionThread.start();
 
-    
+    /**
+     * Sound engine for playing sounds such as deflection sounds, hit sounds, and celebratory sounds.
+     */
+    Runnable soundEngine = new Runnable() {
+        public void run() {
+            while(true) {
+                // Goals Scored (applause.wav)
+                if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
+                    if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
+                        soundPlayer.playAudio(applause);
+                    }
+                }                                                   // not working
+                if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
+                    if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
+                        soundPlayer.playAudio(applause);
+                    }
+                }                                                   // not working
+
+                // Player wins (applause.wav)
+                if (player1.getScore() == 6 || player2.getScore() == 6) {
+                    soundPlayer.playAudio(drumroll);
+                }
+
+                //Player hitting puck (hit.wav)
+                if(player1.collides(puck) || player2.collides(puck)) {
+                    soundPlayer.playAudio(hit);
+                }
+
+                if ((puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) ||
+                    (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) ||
+                    (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) ||
+                    (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2)))) {
+                    soundPlayer.playAudio(bounce);
+                }
+
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {}
+            }
+        }
+    };
+    Thread soundThread = new Thread(soundEngine);
+    soundThread.start();
+
 
 
 }
