@@ -11,18 +11,22 @@ public class SoundPlayer {
     public SoundPlayer() {}
 
     public void playAudio(File soundFile) {
+        // if (!soundOn) {
+        //     return;
+        // }
+        
         try {
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(soundFile));
             clip.start();
 
-            Thread audioThread = new Thread(() -> {
-                try {
-                    Thread.sleep(clip.getMicrosecondLength()/1000);
-                    clip.close();
-                } catch(InterruptedException e) {}
-            });
-            audioThread.start();
+            // Thread audioThread = new Thread(() -> {
+            //     try {
+            //         Thread.sleep(clip.getMicrosecondLength()/1000);
+            //         clip.close();
+            //     } catch(InterruptedException e) {}
+            // });
+            //audioThread.start();
         } catch (Exception e) {}
     }
 }

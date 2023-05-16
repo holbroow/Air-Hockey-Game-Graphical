@@ -146,8 +146,10 @@ public static void main(String[] args) {
     File hit = new File("hit.wav");
     SoundPlayer soundPlayer = new SoundPlayer();
 
-    soundPlayer.playAudio(fanfare);
 
+    if (soundOn == true) {
+        soundPlayer.playAudio(fanfare);
+    }
 
     /**
      * Movement for Player 1 & 2.
@@ -344,7 +346,9 @@ public static void main(String[] args) {
                     table.removeBall(puck);
 
                     if (table.spacePressed()) {
-                        soundPlayer.playAudio(fanfare);
+                        if (soundOn == true) {
+                            soundPlayer.playAudio(fanfare);
+                        }
                         table.removeText(player1WinsGame);       // not removing when called.
                         table.addText(title);
 
@@ -370,7 +374,9 @@ public static void main(String[] args) {
                     table.removeBall(puck);
 
                     if (table.spacePressed()) {
-                        soundPlayer.playAudio(fanfare);
+                        if (soundOn == true) {
+                            soundPlayer.playAudio(fanfare);
+                        }
                         table.removeText(player2WinsGame);      // not removing when called.
                         table.addText(title);
 
@@ -481,44 +487,52 @@ public static void main(String[] args) {
     Runnable soundEngine = new Runnable() {
         public void run() {
             while(true) {
-                if (table.letterPressed('m') && soundOn == true) {
-                    soundOn = false;
-                }
-                if (table.letterPressed('m') && soundOn == false){
-                    soundOn = true;
+                // determine if mute is on or off
+                while (table.escPressed()) {
+                    if (soundOn) {
+                        soundOn = false;
+                    } else {
+                        soundOn = true;
+                    }
                 }
 
-                if (soundOn == true) {
-                    // Goals Scored (applause.wav)
-                    if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
-                        if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
+                // Goals Scored (applause.wav)
+                if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
+                    if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
+                        if (soundOn == true) {
                             soundPlayer.playAudio(applause);
                         }
-                    }                                                   // not working
-                    if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
-                        if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
+                    }
+                }                                                   // not working
+                if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
+                    if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
+                        if (soundOn == true) {
                             soundPlayer.playAudio(applause);
                         }
-                    }                                                   // not working
+                    }
+                }                                                   // not working
 
-                    // Player wins (applause.wav)
-                    if (player1.getScore() == 6 || player2.getScore() == 6) {
+                // Player wins (applause.wav)
+                if (player1.getScore() == 6 || player2.getScore() == 6) {
+                    if (soundOn == true) {
                         soundPlayer.playAudio(drumroll);
                     }
+                }
 
-                    //Player hitting puck (hit.wav)
-                    if(player1.collides(puck) || player2.collides(puck)) {
+                //Player hitting puck (hit.wav)
+                if(player1.collides(puck) || player2.collides(puck)) {
+                    if (soundOn == true) {
                         soundPlayer.playAudio(hit);
                     }
+                }
 
-                    if ((puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) ||
-                        (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) ||
-                        (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) ||
-                        (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2)))) {
-                        soundPlayer.playAudio(bounce);
-                    }
-                } else {
-                    System.out.println("Sound muted.");
+                if ((puck.getXPosition() <= (tableSurface.getXPosition() + (puck.getSize() /2))) ||
+                    (puck.getYPosition() <= (tableSurface.getYPosition() + (puck.getSize() /2))) ||
+                    (puck.getXPosition() >= (tableSurface.getXPosition() + tableSurface.getWidth() - (puck.getSize()/2))) ||
+                    (puck.getYPosition() >= (tableSurface.getYPosition() + tableSurface.getHeight() - (puck.getSize()/2)))) {
+                        if (soundOn == true) {
+                            soundPlayer.playAudio(bounce);
+                        }
                 }
 
                 try {
