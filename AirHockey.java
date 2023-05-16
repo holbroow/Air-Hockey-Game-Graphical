@@ -213,10 +213,10 @@ public static void main(String[] args) {
                 // player1.move(player1.getXSpeed(), player1.getYSpeed());
                 // player2.move(player2.getXSpeed(), player2.getYSpeed());
 
-                System.out.println(player1.getXSpeed() + " xSpeed for Player1"); //debug
-                System.out.println(player1.getYSpeed() + " ySpeed for Player1"); //debug
-                System.out.println(player2.getXSpeed() + " xSpeed for Player2"); //debug
-                System.out.println(player2.getYSpeed() + " ySpeed for Player2"); //debug
+                // System.out.println(player1.getXSpeed() + " xSpeed for Player1"); //debug
+                // System.out.println(player1.getYSpeed() + " ySpeed for Player1"); //debug
+                // System.out.println(player2.getXSpeed() + " xSpeed for Player2"); //debug
+                // System.out.println(player2.getYSpeed() + " ySpeed for Player2"); //debug
 
                 try {
                     Thread.sleep(1);
@@ -443,11 +443,15 @@ public static void main(String[] args) {
             while(true) {
                 if(player1.collides(puck)) {
                     double[] deflectValues = deflect(player1.getXPosition(), player1.getYPosition(), player1.getXSpeed(), player1.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
+                    // puck.setXSpeed(0);
+                    // puck.setYSpeed(0);
                     puck.setXSpeed(deflectValues[2]);
                     puck.setYSpeed(deflectValues[3]);
                 }
                 if(player2.collides(puck)) {
                     double[] deflectValues = deflect(player2.getXPosition(), player2.getYPosition(), player2.getXSpeed(), player2.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
+                    // puck.setXSpeed(0);
+                    // puck.setYSpeed(0);
                     puck.setXSpeed(deflectValues[2]);
                     puck.setYSpeed(deflectValues[3]);
                 }
@@ -481,11 +485,9 @@ public static void main(String[] args) {
                     // puck.setXSpeed(deflectValues[0]);
                     // puck.setYSpeed(deflectValues[1]);
                 }
-        
+
                 puck.move(puck.getXSpeed(), puck.getYSpeed());
 
-                
-        
                 try {
                     Thread.sleep(1);
                 } catch(Exception e) {}
@@ -500,11 +502,20 @@ public static void main(String[] args) {
     Runnable puckFrictionEngine = new Runnable() {
         public void run() {
             while(true) {
+                System.out.println("Puck speed is " + puck.getXSpeed() + ", " + puck.getYSpeed());
+                // fowards
                 if (puck.getXSpeed() > 0) { // friction statements to allow the puck to slow down over time
                     puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
                 }
                 if (puck.getYSpeed() > 0) {
                     puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+                }
+                // backwards
+                if (puck.getXSpeed() < 0) {
+                    puck.setXSpeed(puck.getXSpeed() * -puck.getFriction());
+                }
+                if (puck.getYSpeed() < 0) {
+                    puck.setYSpeed(puck.getYSpeed() * -puck.getFriction());
                 }
                 try {
                     Thread.sleep(10);
@@ -520,15 +531,6 @@ public static void main(String[] args) {
     Runnable soundEngine = new Runnable() {
         public void run() {
             while(true) {
-                // determine if mute is on or off
-                while (table.escPressed()) {
-                    if (soundOn) {
-                        soundOn = false;
-                    } else {
-                        soundOn = true;
-                    }
-                }
-
                 // Goals Scored (applause.wav)
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
@@ -577,17 +579,31 @@ public static void main(String[] args) {
     Thread soundThread = new Thread(soundEngine);
 
 
+
     //// players (mallets)
     movementEngineThread.start();
     speedEngineThread.start();
     playerBoundaryThread.start();
+
     //// keeping score
-    scoreThread.start();
+    //scoreThread.start();
+
     //// the puck (puck)
     puckCollisionThread.start();
-    puckFrictionThread.start();
+    //puckFrictionThread.start();
+
     //// sound effects
     soundThread.start();
+
+
+
+    while(true) {
+        puck.move(puck.getXSpeed(), puck.getYSpeed());
+        try {
+            Thread.sleep(1);
+        } catch (Exception e) {}
+    }
+
 
 }
 }
