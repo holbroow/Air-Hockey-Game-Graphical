@@ -157,34 +157,67 @@ public static void main(String[] args) {
     Runnable movementEngine = new Runnable() {
         public void run() {
             while(true) {
+                // up
                 if (table.letterPressed('w')) {
                     player1.move(0,-1);
+                    // player1.setYSpeed(player1.getYSpeed() - player1.getSpeedMultiplier());
                 }
+                // down
                 if (table.letterPressed('s')) {
                     player1.move(0,1);
+                    // player1.setYSpeed(player1.getYSpeed() + player1.getSpeedMultiplier());
                 }
+                // left
                 if (table.letterPressed('a')) {
                     player1.move(-1,0);
+                    // player1.setXSpeed(player1.getXSpeed() - player1.getSpeedMultiplier());
                 }
+                // right
                 if (table.letterPressed('d')) {
                     player1.move(1,0);
+                    // player1.setXSpeed(player1.getXSpeed() + player1.getSpeedMultiplier());
                 }
+                // up
                 if (table.upPressed()) {
                     player2.move(0,-1);
+                    // player2.setYSpeed(player2.getYSpeed() - player2.getSpeedMultiplier());
                 }
+                // down
                 if (table.downPressed()) {
                     player2.move(0,1);
+                    // player2.setYSpeed(player2.getYSpeed() + player2.getSpeedMultiplier());
                 }
+                // left
                 if (table.leftPressed()) {
                     player2.move(-1,0);
+                    // player2.setXSpeed(player2.getXSpeed() - player2.getSpeedMultiplier());
                 }
+                // right
                 if (table.rightPressed()) {
                     player2.move(1,0);
+                    // player2.setXSpeed(player2.getXSpeed() + player2.getSpeedMultiplier());
                 }
+
+                // if (!table.letterPressed('w') && !table.letterPressed('s')) {
+                //     player1.setYSpeed(0);
+                // }
+                // if (!table.letterPressed('a') && !table.letterPressed('d')) {
+                //     player1.setYSpeed(0);
+                // }
+                // if (!table.upPressed() && !table.downPressed()) {
+                //     player2.setYSpeed(0);
+                // }
+                // if (!table.leftPressed() && !table.rightPressed()) {
+                //     player2.setXSpeed(0);
+                // }
+                // player1.move(player1.getXSpeed(), player1.getYSpeed());
+                // player2.move(player2.getXSpeed(), player2.getYSpeed());
+
                 System.out.println(player1.getXSpeed() + " xSpeed for Player1"); //debug
                 System.out.println(player1.getYSpeed() + " ySpeed for Player1"); //debug
                 System.out.println(player2.getXSpeed() + " xSpeed for Player2"); //debug
                 System.out.println(player2.getYSpeed() + " ySpeed for Player2"); //debug
+
                 try {
                     Thread.sleep(1);
                 } catch (Exception e) {}
@@ -544,16 +577,16 @@ public static void main(String[] args) {
     Thread soundThread = new Thread(soundEngine);
 
 
-    // players (mallets)
+    //// players (mallets)
     movementEngineThread.start();
     speedEngineThread.start();
     playerBoundaryThread.start();
-    // keeping score
+    //// keeping score
     scoreThread.start();
-    // the puck (puck)
+    //// the puck (puck)
     puckCollisionThread.start();
     puckFrictionThread.start();
-    // sound effects
+    //// sound effects
     soundThread.start();
 
 }

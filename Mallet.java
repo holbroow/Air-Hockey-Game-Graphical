@@ -16,7 +16,7 @@ public class Mallet extends Ball {
 
 		this.xSpeed = 0;
 		this.ySpeed = 0;
-        this.speedMultiplier = 0.01;
+        this.speedMultiplier = 0.005;
 		this.originalXPosition = x;
 		this.originalYPosition = y;
         this.score = 0;
@@ -27,7 +27,7 @@ public class Mallet extends Ball {
 		
 		this.xSpeed = 0;
 		this.ySpeed = 0;
-        this.speedMultiplier = 0.01;
+        this.speedMultiplier = 0.005;
         this.originalXPosition = x;
 		this.originalYPosition = y;
         this.score = 0;
