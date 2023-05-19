@@ -7,6 +7,7 @@ import java.io.File;
 public class AirHockey {
 
 private static boolean soundOn = false;
+private static boolean doublePointsActive = false;
 
 /**
  * Calculates resultant trajectory/position of a Ball(or extended) object after 'collision'.
@@ -622,7 +623,68 @@ public static void main(String[] args) {
     };
     Thread soundThread = new Thread(soundEngine);
 
-
+    /**
+     * Key press engine to detect key presses for commands such as muting and cheat codes.
+     */
+    Runnable hotkeyEngine = new Runnable() {
+        public void run() {
+            while(true) {
+                // mute and unmute sounds
+                if (table.letterPressed('m') == true) {
+                    if (soundOn == true) {
+                        soundOn = false;
+                    } else {
+                        soundOn = true;
+                    }
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {}
+                }
+                // player 1 speed CHEAT CODE
+                if (table.letterPressed('z') ==  true) {
+                    if (player1.getSpeedMultiplier() <= 0.01) {
+                        player1.setSpeedMultiplier(player1.getSpeedMultiplier() * 2);
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {}
+                    }
+                }
+                // player 2 speed CHEAT CODE
+                if (table.letterPressed('x') ==  true) {
+                    if (player2.getSpeedMultiplier() <= 0.01) {
+                        player2.setSpeedMultiplier(player2.getSpeedMultiplier() * 2);
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {}
+                    }
+                }
+                // first player to press repective letter gets double points CHEAT CODE
+                if (table.letterPressed('v') == true) {
+                    if (doublePointsActive == false) {
+                        player1.setScoreMultiplier(2);
+                        doublePointsActive = true;
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {}
+                    }
+                }
+                if (table.letterPressed('b') == true) {
+                    if (doublePointsActive == false) {
+                        player2.setScoreMultiplier(2);
+                        doublePointsActive = true;
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {}
+                    }
+                }
+        
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {}
+            }
+        }
+    };
+    Thread hotkeyThread = new Thread(hotkeyEngine);
 
     //// players (mallets)
     movementEngineThread.start();
@@ -639,48 +701,9 @@ public static void main(String[] args) {
     //// sound effects
     soundThread.start();
 
-    // seperate loop to handle key press commands
-    boolean doublePointsActive = false;
-    while(true) {
-        // mute and unmute sounds
-        if (table.letterPressed('m') == true) {
-            if (soundOn == true) {
-                soundOn = false;
-            } else {
-                soundOn = true;
-            }
-        }
-        // player 1 speed CHEAT CODE
-        if (table.letterPressed('z') ==  true) {
-            if (player1.getSpeedMultiplier() <= 0.01) {
-                player1.setSpeedMultiplier(player1.getSpeedMultiplier() * 2);
-            }
-        }
-        // player 2 speed CHEAT CODE
-        if (table.letterPressed('x') ==  true) {
-            if (player2.getSpeedMultiplier() <= 0.01) {
-                player2.setSpeedMultiplier(player2.getSpeedMultiplier() * 2);
-            }
-        }
-        // first player to press repective letter gets double points CHEAT CODE
-        if (table.letterPressed('v') == true) {
-            if (doublePointsActive == false) {
-                player1.setScoreMultiplier(2);
-                doublePointsActive = true;
-            }
-        }
-        if (table.letterPressed('b') == true) {
-            if (doublePointsActive == false) {
-                player2.setScoreMultiplier(2);
-                doublePointsActive = true;
-            }
-        }
-
-        try {
-            Thread.sleep(1);
-        } catch (Exception e) {}
-    }
-
+    //// key commands (hotkeys)
+    hotkeyThread.start();
+    
 
 }
 }
