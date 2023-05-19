@@ -1,3 +1,6 @@
+Will Holbrook
+Student ID: 38722798
+
 This is my repository for the SCC.110 project "Air Hockey" (Project 2 in the Summer 2023 Coursework (First Year):
 
 I believe that i have met all requirements of the program and have re-read the functionality requirements as a guideline, meeting all requirements in my code.
