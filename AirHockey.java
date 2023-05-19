@@ -6,7 +6,7 @@ import java.io.File;
  */
 public class AirHockey {
 
-private static boolean soundOn = true;
+private static boolean soundOn = false;
 
 /**
  * Calculates resultant trajectory/position of a Ball(or extended) object after 'collision'.
@@ -316,7 +316,7 @@ public static void main(String[] args) {
             while (true) {
                 if (puck.getXPosition() >= goal1.getXPosition() && puck.getXPosition() <= (goal1.getXPosition() + goal1.getWidth())) {
                     if (puck.getYPosition() >= goal1.getYPosition() && puck.getYPosition() <= (goal1.getYPosition() + goal1.getHeight())) {
-                        player2.setScore(player2.getScore() + 1);
+                        player2.setScore(player2.getScore() + (1 * player2.getScoreMultiplier()));
                         
                         player2ScoreText.setText(Integer.toString(player2.getScore()));
                         table.removeText(title);
@@ -344,7 +344,7 @@ public static void main(String[] args) {
 
                 if (puck.getXPosition() >= goal2.getXPosition() && puck.getXPosition() <= (goal2.getXPosition() + goal2.getWidth())) {
                     if (puck.getYPosition() >= goal2.getYPosition() && puck.getYPosition() <= (goal2.getYPosition() + goal2.getHeight())) {
-                        player1.setScore(player1.getScore() + 1);
+                        player1.setScore(player1.getScore() + (1 * player2.getScoreMultiplier()));
 
                         player1ScoreText.setText(Integer.toString(player1.getScore()));
                         table.removeText(title);
@@ -510,7 +510,7 @@ public static void main(String[] args) {
                     // puck.setYSpeed(deflectValues[1]);
                 }
 
-                // puck.move(puck.getXSpeed(), puck.getYSpeed());
+                puck.move(puck.getXSpeed(), puck.getYSpeed());
 
                 try {
                     Thread.sleep(1);
@@ -637,12 +637,45 @@ public static void main(String[] args) {
     puckFrictionThread.start();
 
     //// sound effects
-    //soundThread.start();
+    soundThread.start();
 
-
-
+    // seperate loop to handle key press commands
+    boolean doublePointsActive = false;
     while(true) {
-        puck.move(puck.getXSpeed(), puck.getYSpeed());
+        // mute and unmute sounds
+        if (table.letterPressed('m') == true) {
+            if (soundOn == true) {
+                soundOn = false;
+            } else {
+                soundOn = true;
+            }
+        }
+        // player 1 speed CHEAT CODE
+        if (table.letterPressed('z') ==  true) {
+            if (player1.getSpeedMultiplier() <= 0.01) {
+                player1.setSpeedMultiplier(player1.getSpeedMultiplier() * 2);
+            }
+        }
+        // player 2 speed CHEAT CODE
+        if (table.letterPressed('x') ==  true) {
+            if (player2.getSpeedMultiplier() <= 0.01) {
+                player2.setSpeedMultiplier(player2.getSpeedMultiplier() * 2);
+            }
+        }
+        // first player to press repective letter gets double points CHEAT CODE
+        if (table.letterPressed('v') == true) {
+            if (doublePointsActive == false) {
+                player1.setScoreMultiplier(2);
+                doublePointsActive = true;
+            }
+        }
+        if (table.letterPressed('b') == true) {
+            if (doublePointsActive == false) {
+                player2.setScoreMultiplier(2);
+                doublePointsActive = true;
+            }
+        }
+
         try {
             Thread.sleep(1);
         } catch (Exception e) {}

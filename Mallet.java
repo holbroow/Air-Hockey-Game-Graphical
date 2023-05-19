@@ -10,6 +10,7 @@ public class Mallet extends Ball {
     private double originalXPosition;
     private double originalYPosition;
     private int score;
+    private int scoreMultiplier;
 
     public Mallet(double x, double y, double diameter, String col) {
         super(x, y, diameter, col);
@@ -20,6 +21,7 @@ public class Mallet extends Ball {
 		this.originalXPosition = x;
 		this.originalYPosition = y;
         this.score = 0;
+        this.scoreMultiplier = 1;
 	}	
     
     public Mallet(double x, double y, double diameter, String col, int layer) {
@@ -31,6 +33,7 @@ public class Mallet extends Ball {
         this.originalXPosition = x;
 		this.originalYPosition = y;
         this.score = 0;
+        this.scoreMultiplier = 1;
 	}
 
     public void resetPosition() {
@@ -39,6 +42,7 @@ public class Mallet extends Ball {
         this.setSpeedMultiplier(0.01);
         this.setXSpeed(0);
         this.setYSpeed(0);
+        this.setScoreMultiplier(1);
     }
 
     // calculateSpeed() {
@@ -73,6 +77,10 @@ public class Mallet extends Ball {
     public int getScore() {
         return this.score;
     }
+    
+    public int getScoreMultiplier() {
+        return this.scoreMultiplier;
+    }
 
     // mutators
     public void setXSpeed(double value) {
@@ -89,5 +97,9 @@ public class Mallet extends Ball {
 
     public void setScore(int value) {
         this.score = value;
+    }
+
+    public void setScoreMultiplier(int value) {
+        this.scoreMultiplier = value;
     }
 }
