@@ -445,6 +445,18 @@ public static void main(String[] args) {
                     double[] deflectValues = deflect(player1.getXPosition(), player1.getYPosition(), player1.getXSpeed(), player1.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
                     // puck.setXSpeed(0);
                     // puck.setYSpeed(0);
+                    if (player1.getXPosition() < puck.getXPosition()) { // these move the player a pixel away from the puck once it's hit
+                        player1.move(-1, 0);                         // this is because in some cases the player can remain close to the puck if the puck takes too long to move.
+                    }                                                   // meaning that the puck can exhibit odd behaviour.
+                    if (player1.getXPosition() > puck.getXPosition()) {
+                        player1.move(1, 0);
+                    }
+                    if (player1.getYPosition() < puck.getYPosition()) {
+                        player1.move(0, -1);
+                    }
+                    if (player1.getYPosition() > puck.getYPosition()) {
+                        player1.move(0, 1);
+                    }
                     puck.setXSpeed(deflectValues[2]);
                     puck.setYSpeed(deflectValues[3]);
                 }
@@ -452,6 +464,18 @@ public static void main(String[] args) {
                     double[] deflectValues = deflect(player2.getXPosition(), player2.getYPosition(), player2.getXSpeed(), player2.getYSpeed(), puck.getXPosition(), puck.getYPosition(), puck.getXSpeed(), puck.getYSpeed());
                     // puck.setXSpeed(0);
                     // puck.setYSpeed(0);
+                    if (player2.getXPosition() < puck.getXPosition()) {
+                        player2.move(-1, 0);
+                    }
+                    if (player2.getXPosition() > puck.getXPosition()) {
+                        player2.move(1, 0);
+                    }
+                    if (player2.getYPosition() < puck.getYPosition()) {
+                        player2.move(0, -1);
+                    }
+                    if (player2.getYPosition() > puck.getYPosition()) {
+                        player2.move(0, 1);
+                    }
                     puck.setXSpeed(deflectValues[2]);
                     puck.setYSpeed(deflectValues[3]);
                 }
@@ -486,7 +510,7 @@ public static void main(String[] args) {
                     // puck.setYSpeed(deflectValues[1]);
                 }
 
-                puck.move(puck.getXSpeed(), puck.getYSpeed());
+                // puck.move(puck.getXSpeed(), puck.getYSpeed());
 
                 try {
                     Thread.sleep(1);
@@ -499,26 +523,46 @@ public static void main(String[] args) {
     /**
      * Friction engine for allowing the puck to slow down due to slight friction.
      */
+    double frictionThreshold = 0.01; // this is used to set the pucks speed to 0 
     Runnable puckFrictionEngine = new Runnable() {
         public void run() {
             while(true) {
                 System.out.println("Puck speed is " + puck.getXSpeed() + ", " + puck.getYSpeed());
-                // fowards
-                if (puck.getXSpeed() > 0) { // friction statements to allow the puck to slow down over time
+                // if (puck.getXSpeed() > 0) { // friction statements to allow the puck to slow down over time
+                //     puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+                // }
+                // if (puck.getYSpeed() > 0) {
+                //     puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+                // }
+
+                // speed > 0     // we need to determine whether the puck is moving left or right across the air hockey table to then be able to calculate and set speed based on friction.
+                if (puck.getXSpeed() > 0) {
                     puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+                    if (puck.getXSpeed() < frictionThreshold) {
+                        puck.setXSpeed(0);
+                    }
                 }
                 if (puck.getYSpeed() > 0) {
                     puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+                    if (puck.getYSpeed() < frictionThreshold) {
+                        puck.setYSpeed(0);
+                    }
                 }
-                // // backwards //  didn't work as i assumed it would
-                // if (puck.getXSpeed() < 0) {
-                //     puck.setXSpeed(puck.getXSpeed() * -puck.getFriction());
-                // }
-                // if (puck.getYSpeed() < 0) {
-                //     puck.setYSpeed(puck.getYSpeed() * -puck.getFriction());
-                // }
+                // speed < 0
+                if (puck.getXSpeed() < 0) {
+                    puck.setXSpeed(puck.getXSpeed() * puck.getFriction());
+                    if (puck.getXSpeed() > -(frictionThreshold)) {
+                        puck.setXSpeed(0);
+                    }
+                }
+                if (puck.getYSpeed() < 0) {
+                    puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
+                    if (puck.getYSpeed() > -(frictionThreshold)) {
+                        puck.setYSpeed(0);
+                    }
+                }
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(5);
                 } catch (Exception e) {}
             }
         }
@@ -593,7 +637,7 @@ public static void main(String[] args) {
     puckFrictionThread.start();
 
     //// sound effects
-    soundThread.start();
+    //soundThread.start();
 
 
 
