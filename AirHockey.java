@@ -510,13 +510,13 @@ public static void main(String[] args) {
                 if (puck.getYSpeed() > 0) {
                     puck.setYSpeed(puck.getYSpeed() * puck.getFriction());
                 }
-                // backwards
-                if (puck.getXSpeed() < 0) {
-                    puck.setXSpeed(puck.getXSpeed() * -puck.getFriction());
-                }
-                if (puck.getYSpeed() < 0) {
-                    puck.setYSpeed(puck.getYSpeed() * -puck.getFriction());
-                }
+                // // backwards //  didn't work as i assumed it would
+                // if (puck.getXSpeed() < 0) {
+                //     puck.setXSpeed(puck.getXSpeed() * -puck.getFriction());
+                // }
+                // if (puck.getYSpeed() < 0) {
+                //     puck.setYSpeed(puck.getYSpeed() * -puck.getFriction());
+                // }
                 try {
                     Thread.sleep(10);
                 } catch (Exception e) {}
@@ -586,11 +586,11 @@ public static void main(String[] args) {
     playerBoundaryThread.start();
 
     //// keeping score
-    //scoreThread.start();
+    scoreThread.start();
 
     //// the puck (puck)
     puckCollisionThread.start();
-    //puckFrictionThread.start();
+    puckFrictionThread.start();
 
     //// sound effects
     soundThread.start();
